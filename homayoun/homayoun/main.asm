@@ -34,10 +34,6 @@ reset_isr:
 	ldi r16, $FF
 	out DDRA, r16
 
-	; Set PORTB as output
-	ldi r16, $FF
-	out DDRB, r16
-
 	; Enable INT0 with low level trigger
 	in r16, GICR
 	ori r16, (1<<INT0)
@@ -46,6 +42,24 @@ reset_isr:
 	andi r16, $FC
 	out MCUCR, r16
 	
+	; Set USART baud rate to 19.2kbps with 1Mhz clock
+	ldi r16, $00
+	out UBRRH, r16
+	ldi r16, $02
+	out UBRRL,r16
+
+	; Set USART startup settings
+	; Stop bit = 1
+	; Parity = None
+	; Data bit = 8
+	ldi r24,(0<<UMSEL)|(1<<UCSZ1)|(1<<URSEL)|(0<<UPM1)|(0<<UPM0)|(0<<UCPOL)|(1<<UCSZ0)|(0<<USBS)|(0<<UCPOL)
+	out UCSRC,r24
+	ldi r24,(0<<UCSZ2)|(1<<TXEN)|(0<<RXEN)|(1<<UDRIE)
+	out UCSRB,r24
+	ldi r24,(0<<U2X)|(0<<MPCM)
+	out UCSRA,r24
+
+
 	sei
 	jmp start
 
@@ -60,21 +74,16 @@ int0_isr:
 	ldi r16, $0F
 	out PORTC, r16
 	
-	ldi r16, $01
-	out PORTB, r16
-	ldi r16, $04
-	out PORTB, r16
-	ldi r16, $00
-	out PORTA, r16
-	
-	call delay
+	out UDR, r0
+	out PORTA, r0
 
-	ldi r16, $01
-	out PORTB, r16
-	ldi r16, $00
-	out PORTB, r16
-	out PORTA, r0 
+	; Setup LCD write mode in 
 	
+	; Reset INT0 flag
+	in r16, GIFR
+	andi r16, $BF
+	out GIFR, r16
+
 	sei
 	reti
 
