@@ -8,7 +8,7 @@
 ; Managing buffer for USART send:
 ; [ ][ ][ ][ ][ ][ ][ ] ... [ ][ ]
 ;  |           | 
-;  Y           Z
+;  buffer      Y
 
 .dseg
 buffer:
@@ -22,10 +22,6 @@ reset_label:
 .org $002
 int0_label:
 	jmp int0_isr
-
-.org $018
-udre_label:
-	jmp udre_isr
 
 reset_isr:
 	cli
@@ -62,10 +58,10 @@ reset_isr:
 	andi r16, $FC
 	out MCUCR, r16
 	
-	; Set USART baud rate to 19.2kbps with 1Mhz clock
+	; Set USART baud rate to 19.2kbps with 3.6864Mhz clock
 	ldi r16, $00
 	out UBRRH, r16
-	ldi r16, $02
+	ldi r16, $0B
 	out UBRRL,r16
 
 	; Set USART startup settings
@@ -74,7 +70,7 @@ reset_isr:
 	; Data bit = 8
 	ldi r24,(0<<UMSEL)|(1<<UCSZ1)|(1<<URSEL)|(0<<UPM1)|(0<<UPM0)|(0<<UCPOL)|(1<<UCSZ0)|(0<<USBS)|(0<<UCPOL)
 	out UCSRC,r24
-	ldi r24,(0<<UCSZ2)|(1<<TXEN)|(0<<RXEN)|(1<<UDRIE)
+	ldi r24,(0<<UCSZ2)|(1<<TXEN)|(0<<RXEN)
 	out UCSRB,r24
 	ldi r24,(0<<U2X)|(0<<MPCM)
 	out UCSRA,r24
@@ -83,8 +79,12 @@ reset_isr:
 	sei
 	jmp start
 
+; Keypad interrupt rutine, providing delay
+; to keep key bauncing away :)
 int0_isr:
 	cli
+	call delay
+	call delay
 	
 	call key_find
 	mov XL, r0
@@ -100,21 +100,14 @@ int0_isr:
 
 	; Setup LCD write mode in 
 	
-
-	sei
-	reti
-
-udre_isr:
-	cli
-	cp ZL, YL
-	ld r16, Z+
-	out UDR, r16
 	sei
 	reti
 
 start:
     jmp start
 
+; Find key pressed on row keypad
+; and put in r0;
 key_find:
 	ldi r17, $00
 	ldi r18, $00
@@ -145,3 +138,23 @@ key_find_ret:
 	add r0, r18
 	dec r0
 	ret
+
+; Create delay with repeating nop
+delay:
+	ldi r17, $FF
+delay_loop_2:
+	ldi r16, $FF
+delay_loop_1:
+	dec r16
+	cpi r16, $00
+	brne delay_loop_1
+	dec r17
+	cpi r17, $00
+	brne delay_loop_2
+	ret
+
+; Sned bytes stored in the buffer from
+; begin to Y
+usart_send:
+	ret
+	
