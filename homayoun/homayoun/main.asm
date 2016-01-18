@@ -29,8 +29,6 @@ reset_isr:
 	; Set USART buffer pointers
 	ldi YL, LOW(buffer)
 	ldi YH, HIGH(buffer)
-	ldi ZL, LOW(buffer)
-	ldi ZH, HIGH(buffer)
 
 	; PA0 - PA3 --> input + pullup
 	; PA4 - PA7 --> output
@@ -57,28 +55,36 @@ reset_isr:
 	; Parity = None
 	; Data bit = 8
 	ldi r24,(0<<UMSEL)|(1<<UCSZ1)|(1<<URSEL)|(0<<UPM1)|(0<<UPM0)|(0<<UCPOL)|(1<<UCSZ0)|(0<<USBS)|(0<<UCPOL)
-	out UCSRC,r24
+	out UCSRC, r24
 	ldi r24,(0<<UCSZ2)|(1<<TXEN)|(0<<RXEN)
-	out UCSRB,r24
+	out UCSRB, r24
 	ldi r24,(0<<U2X)|(0<<MPCM)
-	out UCSRA,r24
+	out UCSRA, r24
 
-
+	ldi r16, $FF
+	out DDRC, r16
+	ldi r16, $0E
+	out PORTC, r16
+	
 	sei
 	jmp start
 
 ; Keypad interrupt rutine, providing delay
 ; to keep key bauncing away :)
-key_pool:
+key_poll:
 	in r16, PINA
 	ori r16, $F0
 	cpi r16, $FF
-	breq key_pool
+	breq key_poll
 
 	call delay
 	call delay
 	
 	call key_find
+	
+	call seven_seg
+	out PORTB, r22
+
 	mov XL, r0
 	adiw X, $30
 	mov r0, XL
@@ -88,15 +94,70 @@ key_pool:
 	
 	st Y+, r0
 	
-	out PORTB, r0
+	mov r21, r0
+	cpi r21, $3F
 
-	; Setup LCD write mode in 
-	
+	brne key_poll_usart_send
+
+
+
+key_poll_usart_send:
+	call usart_send
 	ret
 
 start:
-    call key_pool
+    call key_poll
     jmp start
+
+; Get value in r0 and
+; put serven seg value in r21
+seven_seg:
+	mov r21, r0
+	cpi r21, 1
+	breq seven_seg_1
+	cpi r21, 2
+	breq seven_seg_2
+	cpi r21, 3
+	breq seven_seg_3
+	cpi r21, 4
+	breq seven_seg_4
+	cpi r21, 5
+	breq seven_seg_5
+	cpi r21, 6
+	breq seven_seg_6
+	cpi r21, 7
+	breq seven_seg_7
+	cpi r21, 8
+	breq seven_seg_8
+	cpi r21, 9
+	breq seven_seg_9
+seven_seg_1:
+	ldi r22, $06
+	ret
+seven_seg_2:
+	ldi r22, $5B
+	ret
+seven_seg_3:
+	ldi r22, $4F
+	ret
+seven_seg_4:
+	ldi r22, $66
+	ret
+seven_seg_5:
+	ldi r22, $6D
+	ret
+seven_seg_6:
+	ldi r22, $7D
+	ret
+seven_seg_7:
+	ldi r22, $07
+	ret
+seven_seg_8:
+	ldi r22, $7F
+	ret
+seven_seg_9:
+	ldi r22, $6F
+	ret
 
 ; Find key pressed on row keypad
 ; and put in r0;
@@ -125,7 +186,6 @@ key_find_loop2:
 	inc r17
 	cpi r17, $04
 	brne key_find_loop1
-
 key_find_ret:
 	mov r0, r20
 	add r0, r18
@@ -149,5 +209,18 @@ delay_loop_1:
 ; Sned bytes stored in the buffer from
 ; begin to Y
 usart_send:
+	ldi ZL, LOW(buffer)
+	ldi ZH, HIGH(buffer)
+usart_send_try:
+    sbis UCSRA, UDRE
+	rjmp usart_send_try
+	ld r16, Z+
+	out UDR, r16
+	cp ZH, YH
+	brne usart_send_try
+	cp ZL, YL
+	brne usart_send_try
+	ldi YL, LOW(buffer)
+	ldi YH, HIGH(buffer)
 	ret
 	

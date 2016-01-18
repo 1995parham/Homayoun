@@ -26,15 +26,27 @@
   <buffer><FILE>Z:\Documents\Git\parham\homayoun\homayoun\homayoun\main.asm</FILE><LINE>14</LINE></buffer>
   <reset_label><FILE>Z:\Documents\Git\parham\homayoun\homayoun\homayoun\main.asm</FILE><LINE>19</LINE></reset_label>
   <reset_isr><FILE>Z:\Documents\Git\parham\homayoun\homayoun\homayoun\main.asm</FILE><LINE>22</LINE></reset_isr>
-  <start><FILE>Z:\Documents\Git\parham\homayoun\homayoun\homayoun\main.asm</FILE><LINE>97</LINE></start>
-  <key_pool><FILE>Z:\Documents\Git\parham\homayoun\homayoun\homayoun\main.asm</FILE><LINE>72</LINE></key_pool>
-  <delay><FILE>Z:\Documents\Git\parham\homayoun\homayoun\homayoun\main.asm</FILE><LINE>136</LINE></delay>
-  <key_find><FILE>Z:\Documents\Git\parham\homayoun\homayoun\homayoun\main.asm</FILE><LINE>103</LINE></key_find>
-  <key_find_loop1><FILE>Z:\Documents\Git\parham\homayoun\homayoun\homayoun\main.asm</FILE><LINE>107</LINE></key_find_loop1>
-  <key_find_loop2><FILE>Z:\Documents\Git\parham\homayoun\homayoun\homayoun\main.asm</FILE><LINE>113</LINE></key_find_loop2>
-  <key_find_ret><FILE>Z:\Documents\Git\parham\homayoun\homayoun\homayoun\main.asm</FILE><LINE>129</LINE></key_find_ret>
-  <delay_loop_2><FILE>Z:\Documents\Git\parham\homayoun\homayoun\homayoun\main.asm</FILE><LINE>138</LINE></delay_loop_2>
-  <delay_loop_1><FILE>Z:\Documents\Git\parham\homayoun\homayoun\homayoun\main.asm</FILE><LINE>140</LINE></delay_loop_1>
-  <usart_send><FILE>Z:\Documents\Git\parham\homayoun\homayoun\homayoun\main.asm</FILE><LINE>151</LINE></usart_send>
+  <start><FILE>Z:\Documents\Git\parham\homayoun\homayoun\homayoun\main.asm</FILE><LINE>110</LINE></start>
+  <key_poll><FILE>Z:\Documents\Git\parham\homayoun\homayoun\homayoun\main.asm</FILE><LINE>75</LINE></key_poll>
+  <delay><FILE>Z:\Documents\Git\parham\homayoun\homayoun\homayoun\main.asm</FILE><LINE>195</LINE></delay>
+  <key_find><FILE>Z:\Documents\Git\parham\homayoun\homayoun\homayoun\main.asm</FILE><LINE>163</LINE></key_find>
+  <seven_seg><FILE>Z:\Documents\Git\parham\homayoun\homayoun\homayoun\main.asm</FILE><LINE>114</LINE></seven_seg>
+  <key_poll_usart_send><FILE>Z:\Documents\Git\parham\homayoun\homayoun\homayoun\main.asm</FILE><LINE>106</LINE></key_poll_usart_send>
+  <usart_send><FILE>Z:\Documents\Git\parham\homayoun\homayoun\homayoun\main.asm</FILE><LINE>210</LINE></usart_send>
+  <seven_seg_1><FILE>Z:\Documents\Git\parham\homayoun\homayoun\homayoun\main.asm</FILE><LINE>133</LINE></seven_seg_1>
+  <seven_seg_2><FILE>Z:\Documents\Git\parham\homayoun\homayoun\homayoun\main.asm</FILE><LINE>136</LINE></seven_seg_2>
+  <seven_seg_3><FILE>Z:\Documents\Git\parham\homayoun\homayoun\homayoun\main.asm</FILE><LINE>139</LINE></seven_seg_3>
+  <seven_seg_4><FILE>Z:\Documents\Git\parham\homayoun\homayoun\homayoun\main.asm</FILE><LINE>142</LINE></seven_seg_4>
+  <seven_seg_5><FILE>Z:\Documents\Git\parham\homayoun\homayoun\homayoun\main.asm</FILE><LINE>145</LINE></seven_seg_5>
+  <seven_seg_6><FILE>Z:\Documents\Git\parham\homayoun\homayoun\homayoun\main.asm</FILE><LINE>148</LINE></seven_seg_6>
+  <seven_seg_7><FILE>Z:\Documents\Git\parham\homayoun\homayoun\homayoun\main.asm</FILE><LINE>151</LINE></seven_seg_7>
+  <seven_seg_8><FILE>Z:\Documents\Git\parham\homayoun\homayoun\homayoun\main.asm</FILE><LINE>154</LINE></seven_seg_8>
+  <seven_seg_9><FILE>Z:\Documents\Git\parham\homayoun\homayoun\homayoun\main.asm</FILE><LINE>157</LINE></seven_seg_9>
+  <key_find_loop1><FILE>Z:\Documents\Git\parham\homayoun\homayoun\homayoun\main.asm</FILE><LINE>167</LINE></key_find_loop1>
+  <key_find_loop2><FILE>Z:\Documents\Git\parham\homayoun\homayoun\homayoun\main.asm</FILE><LINE>173</LINE></key_find_loop2>
+  <key_find_ret><FILE>Z:\Documents\Git\parham\homayoun\homayoun\homayoun\main.asm</FILE><LINE>188</LINE></key_find_ret>
+  <delay_loop_2><FILE>Z:\Documents\Git\parham\homayoun\homayoun\homayoun\main.asm</FILE><LINE>197</LINE></delay_loop_2>
+  <delay_loop_1><FILE>Z:\Documents\Git\parham\homayoun\homayoun\homayoun\main.asm</FILE><LINE>199</LINE></delay_loop_1>
+  <usart_send_try><FILE>Z:\Documents\Git\parham\homayoun\homayoun\homayoun\main.asm</FILE><LINE>213</LINE></usart_send_try>
  </LABELS>
 </ASSEMBLER_INFO>

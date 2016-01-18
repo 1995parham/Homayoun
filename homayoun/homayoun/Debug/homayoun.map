@@ -1,5 +1,5 @@
 
-AVRASM ver. 2.1.57  Z:\Documents\Git\parham\homayoun\homayoun\homayoun\main.asm Mon Jan 18 16:36:06 2016
+AVRASM ver. 2.1.57  Z:\Documents\Git\parham\homayoun\homayoun\homayoun\main.asm Mon Jan 18 18:08:27 2016
 
 
 EQU  SIGNATURE_000 0000001e
@@ -607,13 +607,25 @@ EQU  INT_VECTORS_SIZE 0000002a
 DSEG buffer       00000060
 CSEG reset_label  00000000
 CSEG reset_isr    00000002
-CSEG start        00000033
-CSEG key_pool     00000021
-CSEG delay        00000051
-CSEG key_find     00000037
-CSEG key_find_loop1 0000003a
-CSEG key_find_loop2 0000003f
-CSEG key_find_ret 0000004d
-CSEG delay_loop_2 00000052
-CSEG delay_loop_1 00000053
-CSEG usart_send   0000005a
+CSEG start        0000003d
+CSEG key_poll     00000023
+CSEG delay        0000007f
+CSEG key_find     00000065
+CSEG seven_seg    00000041
+CSEG key_poll_usart_send 0000003a
+CSEG usart_send   00000088
+CSEG seven_seg_1  00000053
+CSEG seven_seg_2  00000055
+CSEG seven_seg_3  00000057
+CSEG seven_seg_4  00000059
+CSEG seven_seg_5  0000005b
+CSEG seven_seg_6  0000005d
+CSEG seven_seg_7  0000005f
+CSEG seven_seg_8  00000061
+CSEG seven_seg_9  00000063
+CSEG key_find_loop1 00000068
+CSEG key_find_loop2 0000006d
+CSEG key_find_ret 0000007b
+CSEG delay_loop_2 00000080
+CSEG delay_loop_1 00000081
+CSEG usart_send_try 0000008a
