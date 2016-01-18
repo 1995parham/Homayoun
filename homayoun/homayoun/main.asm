@@ -99,8 +99,6 @@ key_poll:
 
 	brne key_poll_usart_send
 
-
-
 key_poll_usart_send:
 	call usart_send
 	ret
