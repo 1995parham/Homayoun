@@ -40,9 +40,16 @@ reset_isr:
 	ldi r16, $0F
 	out PORTA, r16
 	
-	; Set PORTA as output
-	ldi r16, $FF
+	; PB0 - PB6 --> output
+	; PB7 --> Input
+	ldi r16, $7F
 	out DDRB, r16
+
+	; PD6 - PD7 --> Output
+	ldi r16, (1 << PD6) | (1 << PD7)
+	out DDRD, r16
+	ldi r16, (1 << PD6)
+	out PORTD, r16
 
 	; Set USART baud rate to 19.2kbps with 3.6864Mhz clock
 	ldi r16, $00
@@ -54,18 +61,18 @@ reset_isr:
 	; Stop bit = 1
 	; Parity = None
 	; Data bit = 8
-	ldi r24, (0<<UMSEL)|(1<<UCSZ1)|(1<<URSEL)|(0<<UPM1)|(0<<UPM0)|(0<<UCPOL)|(1<<UCSZ0)|(0<<USBS)|(0<<UCPOL)
+	ldi r24, (0 << UMSEL) | (1 << UCSZ1) | (1 << URSEL) | (0 << UPM1) | (0 << UPM0) | (0 << UCPOL) | (1 << UCSZ0) | (0 << USBS) | (0 << UCPOL)
 	out UCSRC, r24
-	ldi r24, (0<<UCSZ2)|(1<<TXEN)|(0<<RXEN)
+	ldi r24, (0 << UCSZ2) | (1 << TXEN) | (0 << RXEN)
 	out UCSRB, r24
-	ldi r24, (0<<U2X)|(0<<MPCM)
+	ldi r24, (0 << U2X) | (0 << MPCM)
 	out UCSRA, r24
 
-	ldi r16, $FF
+	; PC0 - PC3 --> Output
+	ldi r16, $0F
 	out DDRC, r16
-	ldi r16, $0E
-	out PORTC, r16
 	
+	call lcd_init
 	sei
 	jmp start
 
@@ -82,12 +89,18 @@ key_poll:
 	
 	call key_find
 	
-	call seven_seg
-	out PORTB, r22
+	; Show in seven segment
+	;ldi r16, $0E
+	;out PORTC, r16
+	;call seven_seg
+	;out PORTB, r22
 
 	mov XL, r0
 	adiw X, $30
 	mov r0, XL
+	
+	; Show in LCD
+	call lcd_write
 
 	ldi r16, $0F
 	out PORTA, r16
@@ -108,7 +121,7 @@ start:
     jmp start
 
 ; Get value in r0 and
-; put serven seg value in r21
+; put serven seg value in r22
 seven_seg:
 	mov r21, r0
 	cpi r21, 1
@@ -221,4 +234,92 @@ usart_send_try:
 	ldi YL, LOW(buffer)
 	ldi YH, HIGH(buffer)
 	ret
-	
+
+
+; Set dispaly, cursor on .. let's rock :)
+lcd_init:
+lcd_init_busy:
+	; E = PD6 = 1
+	ldi r16, (1 << PD6)
+	out PORTD, r16
+	nop
+	; RS = PC3 = 0
+	; RW = PD7 = 1
+	; E = PD6 = 0
+	ldi r16, (0 << PC3)
+	out PORTC, r16
+	ldi r16, (1 << PD7) | (0 << PD6)
+	out PORTD, r16
+	; Check busy flag
+	in r16, PINB
+	ori r16, $7F
+	cpi r16, $FF
+	breq lcd_init_busy
+	; E = PD6 = 1
+	ldi r16, (1 << PD6)
+	out PORTD, r16
+	; PB0 - PB7 --> Output
+	ldi r16, $FF
+	out DDRB, r16
+	; Out 0x0F
+	ldi r16, $0F
+	out PORTB, r16
+	; RS = PC3 = 0
+	; RW = PD7 = 0
+	; E = PD6 = 0
+	ldi r16, (0 << PC3)
+	out PORTC, r16
+	ldi r16, (0 << PD7) | (0 << PD6)
+	out PORTD, r16
+	; E = PD6 = 1
+	ldi r16, (1 << PD6)
+	out PORTD, r16
+	; PB0 - PB6 --> output
+	; PB7 --> Input
+	ldi r16, $7F
+	out DDRB, r16
+	ret
+
+; Send one byte stored in r0 into LCD
+lcd_write:
+lcd_write_busy:
+	; E = PD6 = 1
+	ldi r16, (1 << PD6)
+	out PORTD, r16
+	nop
+	; RS = PC3 = 0
+	; RW = PD7 = 1
+	; E = PD6 = 0
+	ldi r16, (0 << PC3)
+	out PORTC, r16
+	ldi r16, (1 << PD7) | (0 << PD6)
+	out PORTD, r16
+	; Check busy flag
+	in r16, PINB
+	ori r16, $7F
+	cpi r16, $FF
+	breq lcd_write_busy
+	; E = PD6 = 1
+	ldi r16, (1 << PD6)
+	out PORTD, r16
+	; PB0 - PB7 --> Output
+	ldi r16, $FF
+	out DDRB, r16
+	; Out r0
+	mov r16, r0
+	out PORTB, r16
+	; RS = PC3 = 1
+	; RW = PD7 = 0
+	; E = PD6 = 0
+	ldi r16, (1 << PC3)
+	out PORTC, r16
+	ldi r16, (0 << PD7) | (0 << PD6)
+	out PORTD, r16
+	; E = PD6 = 1
+	ldi r16, (1 << PD6)
+	out PORTD, r16
+	; PB0 - PB6 --> output
+	; PB7 --> Input
+	ldi r16, $7F
+	out DDRB, r16
+	ret

@@ -26,27 +26,31 @@
   <buffer><FILE>C:\Users\Parham Alvani\Documents\GitHub\Homayoun\homayoun\homayoun\main.asm</FILE><LINE>14</LINE></buffer>
   <reset_label><FILE>C:\Users\Parham Alvani\Documents\GitHub\Homayoun\homayoun\homayoun\main.asm</FILE><LINE>19</LINE></reset_label>
   <reset_isr><FILE>C:\Users\Parham Alvani\Documents\GitHub\Homayoun\homayoun\homayoun\main.asm</FILE><LINE>22</LINE></reset_isr>
-  <start><FILE>C:\Users\Parham Alvani\Documents\GitHub\Homayoun\homayoun\homayoun\main.asm</FILE><LINE>106</LINE></start>
-  <key_poll><FILE>C:\Users\Parham Alvani\Documents\GitHub\Homayoun\homayoun\homayoun\main.asm</FILE><LINE>74</LINE></key_poll>
-  <delay><FILE>C:\Users\Parham Alvani\Documents\GitHub\Homayoun\homayoun\homayoun\main.asm</FILE><LINE>194</LINE></delay>
-  <key_find><FILE>C:\Users\Parham Alvani\Documents\GitHub\Homayoun\homayoun\homayoun\main.asm</FILE><LINE>162</LINE></key_find>
-  <seven_seg><FILE>C:\Users\Parham Alvani\Documents\GitHub\Homayoun\homayoun\homayoun\main.asm</FILE><LINE>112</LINE></seven_seg>
-  <key_poll_usart_send><FILE>C:\Users\Parham Alvani\Documents\GitHub\Homayoun\homayoun\homayoun\main.asm</FILE><LINE>102</LINE></key_poll_usart_send>
-  <usart_send><FILE>C:\Users\Parham Alvani\Documents\GitHub\Homayoun\homayoun\homayoun\main.asm</FILE><LINE>209</LINE></usart_send>
-  <seven_seg_1><FILE>C:\Users\Parham Alvani\Documents\GitHub\Homayoun\homayoun\homayoun\main.asm</FILE><LINE>132</LINE></seven_seg_1>
-  <seven_seg_2><FILE>C:\Users\Parham Alvani\Documents\GitHub\Homayoun\homayoun\homayoun\main.asm</FILE><LINE>135</LINE></seven_seg_2>
-  <seven_seg_3><FILE>C:\Users\Parham Alvani\Documents\GitHub\Homayoun\homayoun\homayoun\main.asm</FILE><LINE>138</LINE></seven_seg_3>
-  <seven_seg_4><FILE>C:\Users\Parham Alvani\Documents\GitHub\Homayoun\homayoun\homayoun\main.asm</FILE><LINE>141</LINE></seven_seg_4>
-  <seven_seg_5><FILE>C:\Users\Parham Alvani\Documents\GitHub\Homayoun\homayoun\homayoun\main.asm</FILE><LINE>144</LINE></seven_seg_5>
-  <seven_seg_6><FILE>C:\Users\Parham Alvani\Documents\GitHub\Homayoun\homayoun\homayoun\main.asm</FILE><LINE>147</LINE></seven_seg_6>
-  <seven_seg_7><FILE>C:\Users\Parham Alvani\Documents\GitHub\Homayoun\homayoun\homayoun\main.asm</FILE><LINE>150</LINE></seven_seg_7>
-  <seven_seg_8><FILE>C:\Users\Parham Alvani\Documents\GitHub\Homayoun\homayoun\homayoun\main.asm</FILE><LINE>153</LINE></seven_seg_8>
-  <seven_seg_9><FILE>C:\Users\Parham Alvani\Documents\GitHub\Homayoun\homayoun\homayoun\main.asm</FILE><LINE>156</LINE></seven_seg_9>
-  <key_find_loop1><FILE>C:\Users\Parham Alvani\Documents\GitHub\Homayoun\homayoun\homayoun\main.asm</FILE><LINE>166</LINE></key_find_loop1>
-  <key_find_loop2><FILE>C:\Users\Parham Alvani\Documents\GitHub\Homayoun\homayoun\homayoun\main.asm</FILE><LINE>172</LINE></key_find_loop2>
-  <key_find_ret><FILE>C:\Users\Parham Alvani\Documents\GitHub\Homayoun\homayoun\homayoun\main.asm</FILE><LINE>187</LINE></key_find_ret>
-  <delay_loop_2><FILE>C:\Users\Parham Alvani\Documents\GitHub\Homayoun\homayoun\homayoun\main.asm</FILE><LINE>196</LINE></delay_loop_2>
-  <delay_loop_1><FILE>C:\Users\Parham Alvani\Documents\GitHub\Homayoun\homayoun\homayoun\main.asm</FILE><LINE>198</LINE></delay_loop_1>
-  <usart_send_try><FILE>C:\Users\Parham Alvani\Documents\GitHub\Homayoun\homayoun\homayoun\main.asm</FILE><LINE>212</LINE></usart_send_try>
+  <lcd_init><FILE>C:\Users\Parham Alvani\Documents\GitHub\Homayoun\homayoun\homayoun\main.asm</FILE><LINE>240</LINE></lcd_init>
+  <start><FILE>C:\Users\Parham Alvani\Documents\GitHub\Homayoun\homayoun\homayoun\main.asm</FILE><LINE>119</LINE></start>
+  <key_poll><FILE>C:\Users\Parham Alvani\Documents\GitHub\Homayoun\homayoun\homayoun\main.asm</FILE><LINE>81</LINE></key_poll>
+  <delay><FILE>C:\Users\Parham Alvani\Documents\GitHub\Homayoun\homayoun\homayoun\main.asm</FILE><LINE>207</LINE></delay>
+  <key_find><FILE>C:\Users\Parham Alvani\Documents\GitHub\Homayoun\homayoun\homayoun\main.asm</FILE><LINE>175</LINE></key_find>
+  <lcd_write><FILE>C:\Users\Parham Alvani\Documents\GitHub\Homayoun\homayoun\homayoun\main.asm</FILE><LINE>284</LINE></lcd_write>
+  <key_poll_usart_send><FILE>C:\Users\Parham Alvani\Documents\GitHub\Homayoun\homayoun\homayoun\main.asm</FILE><LINE>115</LINE></key_poll_usart_send>
+  <usart_send><FILE>C:\Users\Parham Alvani\Documents\GitHub\Homayoun\homayoun\homayoun\main.asm</FILE><LINE>222</LINE></usart_send>
+  <seven_seg><FILE>C:\Users\Parham Alvani\Documents\GitHub\Homayoun\homayoun\homayoun\main.asm</FILE><LINE>125</LINE></seven_seg>
+  <seven_seg_1><FILE>C:\Users\Parham Alvani\Documents\GitHub\Homayoun\homayoun\homayoun\main.asm</FILE><LINE>145</LINE></seven_seg_1>
+  <seven_seg_2><FILE>C:\Users\Parham Alvani\Documents\GitHub\Homayoun\homayoun\homayoun\main.asm</FILE><LINE>148</LINE></seven_seg_2>
+  <seven_seg_3><FILE>C:\Users\Parham Alvani\Documents\GitHub\Homayoun\homayoun\homayoun\main.asm</FILE><LINE>151</LINE></seven_seg_3>
+  <seven_seg_4><FILE>C:\Users\Parham Alvani\Documents\GitHub\Homayoun\homayoun\homayoun\main.asm</FILE><LINE>154</LINE></seven_seg_4>
+  <seven_seg_5><FILE>C:\Users\Parham Alvani\Documents\GitHub\Homayoun\homayoun\homayoun\main.asm</FILE><LINE>157</LINE></seven_seg_5>
+  <seven_seg_6><FILE>C:\Users\Parham Alvani\Documents\GitHub\Homayoun\homayoun\homayoun\main.asm</FILE><LINE>160</LINE></seven_seg_6>
+  <seven_seg_7><FILE>C:\Users\Parham Alvani\Documents\GitHub\Homayoun\homayoun\homayoun\main.asm</FILE><LINE>163</LINE></seven_seg_7>
+  <seven_seg_8><FILE>C:\Users\Parham Alvani\Documents\GitHub\Homayoun\homayoun\homayoun\main.asm</FILE><LINE>166</LINE></seven_seg_8>
+  <seven_seg_9><FILE>C:\Users\Parham Alvani\Documents\GitHub\Homayoun\homayoun\homayoun\main.asm</FILE><LINE>169</LINE></seven_seg_9>
+  <key_find_loop1><FILE>C:\Users\Parham Alvani\Documents\GitHub\Homayoun\homayoun\homayoun\main.asm</FILE><LINE>179</LINE></key_find_loop1>
+  <key_find_loop2><FILE>C:\Users\Parham Alvani\Documents\GitHub\Homayoun\homayoun\homayoun\main.asm</FILE><LINE>185</LINE></key_find_loop2>
+  <key_find_ret><FILE>C:\Users\Parham Alvani\Documents\GitHub\Homayoun\homayoun\homayoun\main.asm</FILE><LINE>200</LINE></key_find_ret>
+  <delay_loop_2><FILE>C:\Users\Parham Alvani\Documents\GitHub\Homayoun\homayoun\homayoun\main.asm</FILE><LINE>209</LINE></delay_loop_2>
+  <delay_loop_1><FILE>C:\Users\Parham Alvani\Documents\GitHub\Homayoun\homayoun\homayoun\main.asm</FILE><LINE>211</LINE></delay_loop_1>
+  <usart_send_try><FILE>C:\Users\Parham Alvani\Documents\GitHub\Homayoun\homayoun\homayoun\main.asm</FILE><LINE>225</LINE></usart_send_try>
+  <lcd_init_busy><FILE>C:\Users\Parham Alvani\Documents\GitHub\Homayoun\homayoun\homayoun\main.asm</FILE><LINE>241</LINE></lcd_init_busy>
+  <lcd_write_busy><FILE>C:\Users\Parham Alvani\Documents\GitHub\Homayoun\homayoun\homayoun\main.asm</FILE><LINE>285</LINE></lcd_write_busy>
  </LABELS>
 </ASSEMBLER_INFO>
