@@ -207,11 +207,6 @@ delay_loop_1:
 ; Sned bytes stored in the buffer from
 ; begin to Y
 usart_send:
-	ldi r16, $7F
-	out PORTB, r16
-	ldi r16, $00
-	out PORTC, r16
-
 	ldi ZL, LOW(buffer)
 	ldi ZH, HIGH(buffer)
 usart_send_try:
