@@ -1,5 +1,5 @@
 
-AVRASM ver. 2.1.57  C:\Users\Parham Alvani\Documents\GitHub\Homayoun\homayoun\homayoun\main.asm Mon Jan 18 11:04:33 2016
+AVRASM ver. 2.1.57  Z:\Documents\Git\parham\homayoun\homayoun\homayoun\main.asm Mon Jan 18 16:36:06 2016
 
 [builtin](2): Including file 'C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.0.90\avrasm\inc\m16def.inc'
                  
@@ -887,144 +887,139 @@ AVRASM ver. 2.1.57  C:\Users\Parham Alvani\Documents\GitHub\Homayoun\homayoun\ho
                  .cseg
                  .org $000
                  reset_label:
-000000 940c 0004 	jmp reset_isr
-                 
-                 .org $002
-                 int0_label:
-000002 940c 0029 	jmp int0_isr
+000000 940c 0002 	jmp reset_isr
                  
                  reset_isr:
-000004 94f8      	cli
-000005 e50f      	ldi r16 , LOW(RAMEND) 
-000006 bf0d      	out SPL , r16 
-000007 e004      	ldi r16 , HIGH(RAMEND)
-000008 bf0e      	out SPH , r16
+000002 94f8      	cli
+000003 e50f      	ldi r16 , LOW(RAMEND) 
+000004 bf0d      	out SPL , r16 
+000005 e004      	ldi r16 , HIGH(RAMEND)
+000006 bf0e      	out SPH , r16
                  
                  	; Set USART buffer pointers
-000009 e6c0      	ldi YL, LOW(buffer)
-00000a e0d0      	ldi YH, HIGH(buffer)
-00000b e6e0      	ldi ZL, LOW(buffer)
-00000c e0f0      	ldi ZH, HIGH(buffer)
+000007 e6c0      	ldi YL, LOW(buffer)
+000008 e0d0      	ldi YH, HIGH(buffer)
+000009 e6e0      	ldi ZL, LOW(buffer)
+00000a e0f0      	ldi ZH, HIGH(buffer)
                  
-                 	; PC0 - PC3 --> input + pullup
-                 	; PC4 - PC7 --> output
-00000d ef00      	ldi r16, $F0
-00000e bb04      	out DDRC, r16
-00000f b700      	in r16, SFIOR
-000010 7f0b      	andi r16, $FB
-000011 bf00      	out SFIOR, r16
-000012 e00f      	ldi r16, $0F
-000013 bb05      	out PORTC, r16
+                 	; PA0 - PA3 --> input + pullup
+                 	; PA4 - PA7 --> output
+00000b ef00      	ldi r16, $F0
+00000c bb0a      	out DDRA, r16
+00000d b700      	in r16, SFIOR
+00000e 7f0b      	andi r16, $FB
+00000f bf00      	out SFIOR, r16
+000010 e00f      	ldi r16, $0F
+000011 bb0b      	out PORTA, r16
                  	
                  	; Set PORTA as output
-000014 ef0f      	ldi r16, $FF
-000015 bb0a      	out DDRA, r16
+000012 ef0f      	ldi r16, $FF
+000013 bb07      	out DDRB, r16
                  
-                 	; Enable INT0 with low level trigger
-000016 b70b      	in r16, GICR
-000017 6400      	ori r16, (1<<INT0)
-000018 bf0b      	out GICR, r16
-000019 b705      	in r16, MCUCR
-00001a 7f0c      	andi r16, $FC
-00001b bf05      	out MCUCR, r16
-                 	
                  	; Set USART baud rate to 19.2kbps with 3.6864Mhz clock
-00001c e000      	ldi r16, $00
-00001d bd00      	out UBRRH, r16
-00001e e00b      	ldi r16, $0B
-00001f b909      	out UBRRL,r16
+000014 e000      	ldi r16, $00
+000015 bd00      	out UBRRH, r16
+000016 e00b      	ldi r16, $0B
+000017 b909      	out UBRRL,r16
                  
                  	; Set USART startup settings
                  	; Stop bit = 1
                  	; Parity = None
                  	; Data bit = 8
-000020 e886      	ldi r24,(0<<UMSEL)|(1<<UCSZ1)|(1<<URSEL)|(0<<UPM1)|(0<<UPM0)|(0<<UCPOL)|(1<<UCSZ0)|(0<<USBS)|(0<<UCPOL)
-000021 bd80      	out UCSRC,r24
-000022 e088      	ldi r24,(0<<UCSZ2)|(1<<TXEN)|(0<<RXEN)
-000023 b98a      	out UCSRB,r24
-000024 e080      	ldi r24,(0<<U2X)|(0<<MPCM)
-000025 b98b      	out UCSRA,r24
+000018 e886      	ldi r24,(0<<UMSEL)|(1<<UCSZ1)|(1<<URSEL)|(0<<UPM1)|(0<<UPM0)|(0<<UCPOL)|(1<<UCSZ0)|(0<<USBS)|(0<<UCPOL)
+000019 bd80      	out UCSRC,r24
+00001a e088      	ldi r24,(0<<UCSZ2)|(1<<TXEN)|(0<<RXEN)
+00001b b98a      	out UCSRB,r24
+00001c e080      	ldi r24,(0<<U2X)|(0<<MPCM)
+00001d b98b      	out UCSRA,r24
                  
                  
-000026 9478      	sei
-000027 940c 0039 	jmp start
+00001e 9478      	sei
+00001f 940c 0033 	jmp start
                  
-                 int0_isr:
-000029 94f8      	cli
-00002a 940e 0055 	call delay
-00002c 940e 0055 	call delay
+                 ; Keypad interrupt rutine, providing delay
+                 ; to keep key bauncing away :)
+                 key_pool:
+000021 b309      	in r16, PINA
+000022 6f00      	ori r16, $F0
+000023 3f0f      	cpi r16, $FF
+000024 f3e1      	breq key_pool
+                 
+000025 940e 0051 	call delay
+000027 940e 0051 	call delay
                  	
-00002e 940e 003b 	call key_find
-000030 2da0      	mov XL, r0
-000031 96d0      	adiw X, $30
-000032 2e0a      	mov r0, XL
+000029 940e 0037 	call key_find
+00002b 2da0      	mov XL, r0
+00002c 96d0      	adiw X, $30
+00002d 2e0a      	mov r0, XL
                  
-000033 e00f      	ldi r16, $0F
-000034 bb05      	out PORTC, r16
+00002e e00f      	ldi r16, $0F
+00002f bb0b      	out PORTA, r16
                  	
-000035 9209      	st Y+, r0
+000030 9209      	st Y+, r0
                  	
-000036 ba0b      	out PORTA, r0
+000031 ba08      	out PORTB, r0
                  
                  	; Setup LCD write mode in 
                  	
-000037 9478      	sei
-000038 9518      	reti
+000032 9508      	ret
                  
                  start:
-000039 940c 0039     jmp start
+000033 940e 0021     call key_pool
+000035 940c 0033     jmp start
                  
                  ; Find key pressed on row keypad
                  ; and put in r0;
                  key_find:
-00003b e010      	ldi r17, $00
-00003c e020      	ldi r18, $00
-00003d e73f      	ldi r19, $7F
+000037 e010      	ldi r17, $00
+000038 e020      	ldi r18, $00
+000039 e73f      	ldi r19, $7F
                  key_find_loop1:
-00003e 2f03      	mov r16, r19
-00003f bb05      	out PORTC, r16
-000040 0000      	nop
-000041 b303      	in r16, PINC
-000042 e044      	ldi r20, $04
+00003a 2f03      	mov r16, r19
+00003b bb0b      	out PORTA, r16
+00003c 0000      	nop
+00003d b309      	in r16, PINA
+00003e e044      	ldi r20, $04
                  key_find_loop2:
-000043 9507      	ror r16
-000044 f460      	brcc key_find_ret
-000045 954a      	dec r20
-000046 3040      	cpi r20, $00
-000047 f7d9      	brne key_find_loop2
-000048 9523      	inc r18
-000049 9523      	inc r18
-00004a 9523      	inc r18
-00004b 9523      	inc r18
-00004c 9408      	sec
-00004d 9537      	ror r19
-00004e 9513      	inc r17
-00004f 3014      	cpi r17, $04
-000050 f769      	brne key_find_loop1
+00003f 9507      	ror r16
+000040 f460      	brcc key_find_ret
+000041 954a      	dec r20
+000042 3040      	cpi r20, $00
+000043 f7d9      	brne key_find_loop2
+000044 9523      	inc r18
+000045 9523      	inc r18
+000046 9523      	inc r18
+000047 9523      	inc r18
+000048 9408      	sec
+000049 9537      	ror r19
+00004a 9513      	inc r17
+00004b 3014      	cpi r17, $04
+00004c f769      	brne key_find_loop1
+                 
                  key_find_ret:
-000051 2e04      	mov r0, r20
-000052 0e02      	add r0, r18
-000053 940a      	dec r0
-000054 9508      	ret
+00004d 2e04      	mov r0, r20
+00004e 0e02      	add r0, r18
+00004f 940a      	dec r0
+000050 9508      	ret
                  
                  ; Create delay with repeating nop
                  delay:
-000055 ef1f      	ldi r17, $FF
+000051 ef1f      	ldi r17, $FF
                  delay_loop_2:
-000056 ef0f      	ldi r16, $FF
+000052 ef0f      	ldi r16, $FF
                  delay_loop_1:
-000057 950a      	dec r16
-000058 3000      	cpi r16, $00
-000059 f7e9      	brne delay_loop_1
-00005a 951a      	dec r17
-00005b 3010      	cpi r17, $00
-00005c f7c9      	brne delay_loop_2
-00005d 9508      	ret
+000053 950a      	dec r16
+000054 3000      	cpi r16, $00
+000055 f7e9      	brne delay_loop_1
+000056 951a      	dec r17
+000057 3010      	cpi r17, $00
+000058 f7c9      	brne delay_loop_2
+000059 9508      	ret
                  
                  ; Sned bytes stored in the buffer from
                  ; begin to Y
                  usart_send:
-00005e 9508      	ret
+00005a 9508      	ret
 
 
 RESOURCE USE INFORMATION
@@ -1044,29 +1039,29 @@ counted separately from r26..r31 here.
 "ATmega16" register use summary:
 r0 :   7 r1 :   0 r2 :   0 r3 :   0 r4 :   0 r5 :   0 r6 :   0 r7 :   0 
 r8 :   0 r9 :   0 r10:   0 r11:   0 r12:   0 r13:   0 r14:   0 r15:   0 
-r16:  32 r17:   6 r18:   6 r19:   3 r20:   4 r21:   0 r22:   0 r23:   0 
+r16:  29 r17:   6 r18:   6 r19:   3 r20:   4 r21:   0 r22:   0 r23:   0 
 r24:   6 r25:   0 r26:   2 r27:   0 r28:   1 r29:   1 r30:   1 r31:   1 
 x  :   1 y  :   1 z  :   0 
 Registers used: 14 out of 35 (40.0%)
 
 "ATmega16" instruction use summary:
 .lds  :   0 .sts  :   0 adc   :   0 add   :   1 adiw  :   1 and   :   0 
-andi  :   2 asr   :   0 bclr  :   0 bld   :   0 brbc  :   0 brbs  :   0 
-brcc  :   1 brcs  :   0 break :   0 breq  :   0 brge  :   0 brhc  :   0 
+andi  :   1 asr   :   0 bclr  :   0 bld   :   0 brbc  :   0 brbs  :   0 
+brcc  :   1 brcs  :   0 break :   0 breq  :   1 brge  :   0 brhc  :   0 
 brhs  :   0 brid  :   0 brie  :   0 brlo  :   0 brlt  :   0 brmi  :   0 
 brne  :   4 brpl  :   0 brsh  :   0 brtc  :   0 brts  :   0 brvc  :   0 
-brvs  :   0 bset  :   0 bst   :   0 call  :   3 cbi   :   0 cbr   :   0 
-clc   :   0 clh   :   0 cli   :   2 cln   :   0 clr   :   0 cls   :   0 
+brvs  :   0 bset  :   0 bst   :   0 call  :   4 cbi   :   0 cbr   :   0 
+clc   :   0 clh   :   0 cli   :   1 cln   :   0 clr   :   0 cls   :   0 
 clt   :   0 clv   :   0 clz   :   0 com   :   0 cp    :   0 cpc   :   0 
-cpi   :   4 cpse  :   0 dec   :   4 eor   :   0 fmul  :   0 fmuls :   0 
-fmulsu:   0 icall :   0 ijmp  :   0 in    :   4 inc   :   5 jmp   :   4 
+cpi   :   5 cpse  :   0 dec   :   4 eor   :   0 fmul  :   0 fmuls :   0 
+fmulsu:   0 icall :   0 ijmp  :   0 in    :   3 inc   :   5 jmp   :   3 
 ld    :   0 ldd   :   0 ldi   :  21 lds   :   0 lpm   :   0 lsl   :   0 
 lsr   :   0 mov   :   4 movw  :   0 mul   :   0 muls  :   0 mulsu :   0 
-neg   :   0 nop   :   1 or    :   0 ori   :   1 out   :  16 pop   :   0 
-push  :   0 rcall :   0 ret   :   3 reti  :   1 rjmp  :   0 rol   :   0 
+neg   :   0 nop   :   1 or    :   0 ori   :   1 out   :  14 pop   :   0 
+push  :   0 rcall :   0 ret   :   4 reti  :   0 rjmp  :   0 rol   :   0 
 ror   :   2 sbc   :   0 sbci  :   0 sbi   :   0 sbic  :   0 sbis  :   0 
 sbiw  :   0 sbr   :   0 sbrc  :   0 sbrs  :   0 sec   :   1 seh   :   0 
-sei   :   2 sen   :   0 ser   :   0 ses   :   0 set   :   0 sev   :   0 
+sei   :   1 sen   :   0 ser   :   0 ses   :   0 set   :   0 sev   :   0 
 sez   :   0 sleep :   0 spm   :   0 st    :   1 std   :   0 sts   :   0 
 sub   :   0 subi  :   0 swap  :   0 tst   :   0 wdr   :   0 
 Instructions used: 23 out of 113 (20.4%)
@@ -1074,7 +1069,7 @@ Instructions used: 23 out of 113 (20.4%)
 "ATmega16" memory use summary [bytes]:
 Segment   Begin    End      Code   Data   Used    Size   Use%
 ---------------------------------------------------------------
-[.cseg] 0x000000 0x0000be    190      0    190   16384   1.2%
+[.cseg] 0x000000 0x0000b6    182      0    182   16384   1.1%
 [.dseg] 0x000060 0x000260      0    512    512    1024  50.0%
 [.eseg] 0x000000 0x000000      0      0      0     512   0.0%
 

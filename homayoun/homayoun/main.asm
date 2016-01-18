@@ -19,10 +19,6 @@ buffer:
 reset_label:
 	jmp reset_isr
 
-.org $002
-int0_label:
-	jmp int0_isr
-
 reset_isr:
 	cli
 	ldi r16 , LOW(RAMEND) 
@@ -36,28 +32,20 @@ reset_isr:
 	ldi ZL, LOW(buffer)
 	ldi ZH, HIGH(buffer)
 
-	; PC0 - PC3 --> input + pullup
-	; PC4 - PC7 --> output
+	; PA0 - PA3 --> input + pullup
+	; PA4 - PA7 --> output
 	ldi r16, $F0
-	out DDRC, r16
+	out DDRA, r16
 	in r16, SFIOR
 	andi r16, $FB
 	out SFIOR, r16
 	ldi r16, $0F
-	out PORTC, r16
+	out PORTA, r16
 	
 	; Set PORTA as output
 	ldi r16, $FF
-	out DDRA, r16
+	out DDRB, r16
 
-	; Enable INT0 with low level trigger
-	in r16, GICR
-	ori r16, (1<<INT0)
-	out GICR, r16
-	in r16, MCUCR
-	andi r16, $FC
-	out MCUCR, r16
-	
 	; Set USART baud rate to 19.2kbps with 3.6864Mhz clock
 	ldi r16, $00
 	out UBRRH, r16
@@ -81,8 +69,12 @@ reset_isr:
 
 ; Keypad interrupt rutine, providing delay
 ; to keep key bauncing away :)
-int0_isr:
-	cli
+key_pool:
+	in r16, PINA
+	ori r16, $F0
+	cpi r16, $FF
+	breq key_pool
+
 	call delay
 	call delay
 	
@@ -92,18 +84,18 @@ int0_isr:
 	mov r0, XL
 
 	ldi r16, $0F
-	out PORTC, r16
+	out PORTA, r16
 	
 	st Y+, r0
 	
-	out PORTA, r0
+	out PORTB, r0
 
 	; Setup LCD write mode in 
 	
-	sei
-	reti
+	ret
 
 start:
+    call key_pool
     jmp start
 
 ; Find key pressed on row keypad
@@ -114,9 +106,9 @@ key_find:
 	ldi r19, $7F
 key_find_loop1:
 	mov r16, r19
-	out PORTC, r16
+	out PORTA, r16
 	nop
-	in r16, PINC
+	in r16, PINA
 	ldi r20, $04
 key_find_loop2:
 	ror r16
@@ -133,6 +125,7 @@ key_find_loop2:
 	inc r17
 	cpi r17, $04
 	brne key_find_loop1
+
 key_find_ret:
 	mov r0, r20
 	add r0, r18
