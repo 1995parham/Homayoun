@@ -5,6 +5,16 @@
 ; Author : Parham Alvani
 ;
 
+; Managing buffer for USART send:
+; [ ][ ][ ][ ][ ][ ][ ] ... [ ][ ]
+;  |           | 
+;  Y           Z
+
+.dseg
+buffer:
+	.byte 512
+
+.cseg
 .org $000
 reset_label:
 	jmp reset_isr
@@ -13,6 +23,10 @@ reset_label:
 int0_label:
 	jmp int0_isr
 
+.org $018
+udre_label:
+	jmp udre_isr
+
 reset_isr:
 	cli
 	ldi r16 , LOW(RAMEND) 
@@ -20,12 +34,18 @@ reset_isr:
 	ldi r16 , HIGH(RAMEND)
 	out SPH , r16
 
+	; Set USART buffer pointers
+	ldi YL, LOW(buffer)
+	ldi YH, HIGH(buffer)
+	ldi ZL, LOW(buffer)
+	ldi ZH, HIGH(buffer)
+
 	; PC0 - PC3 --> input + pullup
 	; PC4 - PC7 --> output
 	ldi r16, $F0
 	out DDRC, r16
 	in r16, SFIOR
-	ldi r16, $FB
+	andi r16, $FB
 	out SFIOR, r16
 	ldi r16, $0F
 	out PORTC, r16
@@ -74,29 +94,26 @@ int0_isr:
 	ldi r16, $0F
 	out PORTC, r16
 	
-	out UDR, r0
+	st Y+, r0
+	
 	out PORTA, r0
 
 	; Setup LCD write mode in 
 	
-	; Reset INT0 flag
-	in r16, GIFR
-	andi r16, $BF
-	out GIFR, r16
 
+	sei
+	reti
+
+udre_isr:
+	cli
+	cp ZL, YL
+	ld r16, Z+
+	out UDR, r16
 	sei
 	reti
 
 start:
     jmp start
-
-delay:
-	ldi r16, $FF
-delay_loop:
-	subi r16, $01
-	cpi r16, $00
-	brne delay_loop
-	ret
 
 key_find:
 	ldi r17, $00
@@ -112,11 +129,13 @@ key_find_loop2:
 	ror r16
 	brcc key_find_ret
 	dec r20
+	cpi r20, $00
 	brne key_find_loop2
 	inc r18
 	inc r18
 	inc r18
 	inc r18
+	sec
 	ror r19
 	inc r17
 	cpi r17, $04

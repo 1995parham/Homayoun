@@ -1,19 +1,19 @@
 <ASSEMBLER_INFO>
  <VERSION>2.1.57</VERSION>
  <DEVICE>"ATmega16"</DEVICE>
- <WORKING_DIR>C:\Users\Parham Alvani\Documents\GitHub\Homayoun\homayoun\homayoun\Debug</WORKING_DIR>
+ <WORKING_DIR>Z:\Documents\Git\parham\homayoun\homayoun\homayoun\Debug</WORKING_DIR>
  <INCLUDE_PATH>
   <DIR>C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.0.90\avrasm\inc</DIR>
   <DIR>C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.0.90\avrasm\inc</DIR>
   <DIR>C:\Program Files (x86)\Atmel\Studio\7.0\toolchain\avr8\avrassembler\Include</DIR>
   <DIR></DIR>
  </INCLUDE_PATH>
- <SOURCE_FILE>C:\Users\Parham Alvani\Documents\GitHub\Homayoun\homayoun\homayoun\main.asm</SOURCE_FILE>
+ <SOURCE_FILE>Z:\Documents\Git\parham\homayoun\homayoun\homayoun\main.asm</SOURCE_FILE>
  <INCLUDED_FILES>
   <FILE>C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.0.90\avrasm\inc\m16def.inc</FILE>
  </INCLUDED_FILES>
  <OBJECT_FILES>
-  <FILE>C:\Users\Parham Alvani\Documents\GitHub\Homayoun\homayoun\homayoun\Debug\homayoun.obj</FILE>
+  <FILE>Z:\Documents\Git\parham\homayoun\homayoun\homayoun\Debug\homayoun.obj</FILE>
  </OBJECT_FILES>
  <HEX_FILES>
   <FILE>homayoun.hex</FILE>
@@ -23,16 +23,17 @@
   <FILE>homayoun.lss</FILE>
  </OUTPUT_FILES>
  <LABELS>
-  <reset_label><FILE>C:\Users\Parham Alvani\Documents\GitHub\Homayoun\homayoun\homayoun\main.asm</FILE><LINE>9</LINE></reset_label>
-  <reset_isr><FILE>C:\Users\Parham Alvani\Documents\GitHub\Homayoun\homayoun\homayoun\main.asm</FILE><LINE>16</LINE></reset_isr>
-  <int0_label><FILE>C:\Users\Parham Alvani\Documents\GitHub\Homayoun\homayoun\homayoun\main.asm</FILE><LINE>13</LINE></int0_label>
-  <int0_isr><FILE>C:\Users\Parham Alvani\Documents\GitHub\Homayoun\homayoun\homayoun\main.asm</FILE><LINE>66</LINE></int0_isr>
-  <start><FILE>C:\Users\Parham Alvani\Documents\GitHub\Homayoun\homayoun\homayoun\main.asm</FILE><LINE>90</LINE></start>
-  <key_find><FILE>C:\Users\Parham Alvani\Documents\GitHub\Homayoun\homayoun\homayoun\main.asm</FILE><LINE>101</LINE></key_find>
-  <delay><FILE>C:\Users\Parham Alvani\Documents\GitHub\Homayoun\homayoun\homayoun\main.asm</FILE><LINE>93</LINE></delay>
-  <delay_loop><FILE>C:\Users\Parham Alvani\Documents\GitHub\Homayoun\homayoun\homayoun\main.asm</FILE><LINE>95</LINE></delay_loop>
-  <key_find_loop1><FILE>C:\Users\Parham Alvani\Documents\GitHub\Homayoun\homayoun\homayoun\main.asm</FILE><LINE>105</LINE></key_find_loop1>
-  <key_find_loop2><FILE>C:\Users\Parham Alvani\Documents\GitHub\Homayoun\homayoun\homayoun\main.asm</FILE><LINE>111</LINE></key_find_loop2>
-  <key_find_ret><FILE>C:\Users\Parham Alvani\Documents\GitHub\Homayoun\homayoun\homayoun\main.asm</FILE><LINE>124</LINE></key_find_ret>
+  <buffer><FILE>Z:\Documents\Git\parham\homayoun\homayoun\homayoun\main.asm</FILE><LINE>14</LINE></buffer>
+  <reset_label><FILE>Z:\Documents\Git\parham\homayoun\homayoun\homayoun\main.asm</FILE><LINE>19</LINE></reset_label>
+  <reset_isr><FILE>Z:\Documents\Git\parham\homayoun\homayoun\homayoun\main.asm</FILE><LINE>30</LINE></reset_isr>
+  <int0_label><FILE>Z:\Documents\Git\parham\homayoun\homayoun\homayoun\main.asm</FILE><LINE>23</LINE></int0_label>
+  <int0_isr><FILE>Z:\Documents\Git\parham\homayoun\homayoun\homayoun\main.asm</FILE><LINE>86</LINE></int0_isr>
+  <udre_label><FILE>Z:\Documents\Git\parham\homayoun\homayoun\homayoun\main.asm</FILE><LINE>27</LINE></udre_label>
+  <udre_isr><FILE>Z:\Documents\Git\parham\homayoun\homayoun\homayoun\main.asm</FILE><LINE>107</LINE></udre_isr>
+  <start><FILE>Z:\Documents\Git\parham\homayoun\homayoun\homayoun\main.asm</FILE><LINE>115</LINE></start>
+  <key_find><FILE>Z:\Documents\Git\parham\homayoun\homayoun\homayoun\main.asm</FILE><LINE>118</LINE></key_find>
+  <key_find_loop1><FILE>Z:\Documents\Git\parham\homayoun\homayoun\homayoun\main.asm</FILE><LINE>122</LINE></key_find_loop1>
+  <key_find_loop2><FILE>Z:\Documents\Git\parham\homayoun\homayoun\homayoun\main.asm</FILE><LINE>128</LINE></key_find_loop2>
+  <key_find_ret><FILE>Z:\Documents\Git\parham\homayoun\homayoun\homayoun\main.asm</FILE><LINE>143</LINE></key_find_ret>
  </LABELS>
 </ASSEMBLER_INFO>
