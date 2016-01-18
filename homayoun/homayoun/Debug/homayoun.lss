@@ -1,5 +1,5 @@
 
-AVRASM ver. 2.1.57  Z:\Documents\Git\parham\homayoun\homayoun\homayoun\main.asm Mon Jan 18 18:08:27 2016
+AVRASM ver. 2.1.57  Z:\Documents\Git\parham\homayoun\homayoun\homayoun\main.asm Mon Jan 18 18:22:20 2016
 
 [builtin](2): Including file 'C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.0.90\avrasm\inc\m16def.inc'
                  
@@ -924,21 +924,20 @@ AVRASM ver. 2.1.57  Z:\Documents\Git\parham\homayoun\homayoun\homayoun\main.asm 
                  	; Stop bit = 1
                  	; Parity = None
                  	; Data bit = 8
-000016 e886      	ldi r24,(0<<UMSEL)|(1<<UCSZ1)|(1<<URSEL)|(0<<UPM1)|(0<<UPM0)|(0<<UCPOL)|(1<<UCSZ0)|(0<<USBS)|(0<<UCPOL)
-000017 bd80      	out UCSRC,r24
-000018 e088      	ldi r24,(0<<UCSZ2)|(1<<TXEN)|(0<<RXEN)
-000019 b98a      	out UCSRB,r24
-00001a e080      	ldi r24,(0<<U2X)|(0<<MPCM)
-00001b b98b      	out UCSRA,r24
+000016 e886      	ldi r24, (0<<UMSEL)|(1<<UCSZ1)|(1<<URSEL)|(0<<UPM1)|(0<<UPM0)|(0<<UCPOL)|(1<<UCSZ0)|(0<<USBS)|(0<<UCPOL)
+000017 bd80      	out UCSRC, r24
+000018 e088      	ldi r24, (0<<UCSZ2)|(1<<TXEN)|(0<<RXEN)
+000019 b98a      	out UCSRB, r24
+00001a e080      	ldi r24, (0<<U2X)|(0<<MPCM)
+00001b b98b      	out UCSRA, r24
                  
 00001c ef0f      	ldi r16, $FF
 00001d bb04      	out DDRC, r16
 00001e e00e      	ldi r16, $0E
 00001f bb05      	out PORTC, r16
                  	
-                 
 000020 9478      	sei
-000021 940c 003d 	jmp start
+000021 940c 003c 	jmp start
                  
                  ; Keypad interrupt rutine, providing delay
                  ; to keep key bauncing away :)
@@ -953,35 +952,37 @@ AVRASM ver. 2.1.57  Z:\Documents\Git\parham\homayoun\homayoun\homayoun\main.asm 
                  	
 00002b 940e 0065 	call key_find
                  	
-00002d 2d50      	mov r21, r0
-00002e 940e 0041 	call seven_seg
-000030 bb68      	out PORTB, r22
+00002d 940e 0040 	call seven_seg
+00002f bb68      	out PORTB, r22
                  
-000031 2da0      	mov XL, r0
-000032 96d0      	adiw X, $30
-000033 2e0a      	mov r0, XL
+000030 2da0      	mov XL, r0
+000031 96d0      	adiw X, $30
+000032 2e0a      	mov r0, XL
                  
-000034 e00f      	ldi r16, $0F
-000035 bb0b      	out PORTA, r16
+000033 e00f      	ldi r16, $0F
+000034 bb0b      	out PORTA, r16
                  	
-000036 9209      	st Y+, r0
+000035 9209      	st Y+, r0
                  	
-000037 2d50      	mov r21, r0
-000038 335f      	cpi r21,$3F
+000036 2d50      	mov r21, r0
+000037 335f      	cpi r21, $3F
                  
-000039 f401      	brne key_poll_usart_send
+000038 f401      	brne key_poll_usart_send
                  
                  
                  
                  key_poll_usart_send:
-00003a 940e 0088 	call usart_send
-00003c 9508      	ret
+000039 940e 0088 	call usart_send
+00003b 9508      	ret
                  
                  start:
-00003d 940e 0023     call key_poll
-00003f 940c 003d     jmp start
+00003c 940e 0023     call key_poll
+00003e 940c 003c     jmp start
                  
+                 ; Get value in r0 and
+                 ; put serven seg value in r21
                  seven_seg:
+000040 2d50      	mov r21, r0
 000041 3051      	cpi r21, 1
 000042 f081      	breq seven_seg_1
 000043 3052      	cpi r21, 2
@@ -1078,18 +1079,25 @@ AVRASM ver. 2.1.57  Z:\Documents\Git\parham\homayoun\homayoun\homayoun\main.asm 
                  ; Sned bytes stored in the buffer from
                  ; begin to Y
                  usart_send:
-000088 e6e0      	ldi ZL, LOW(buffer)
-000089 e0f0      	ldi ZH, HIGH(buffer)
+000088 e70f      	ldi r16, $7F
+000089 bb08      	out PORTB, r16
+00008a e000      	ldi r16, $00
+00008b bb05      	out PORTC, r16
+                 
+00008c e6e0      	ldi ZL, LOW(buffer)
+00008d e0f0      	ldi ZH, HIGH(buffer)
                  usart_send_try:
-00008a 9b5d          sbis UCSRA, UDRE
-00008b cffe      	rjmp usart_send_try
-00008c 9101      	ld r16, Z+
-00008d b90c      	out UDR, r16
-00008e 17fd      	cp ZH, YH
-00008f f7d1      	brne usart_send_try
-000090 17ec      	cp ZL, YL
-000091 f7c1      	brne usart_send_try
-000092 9508      	ret
+00008e 9b5d          sbis UCSRA, UDRE
+00008f cffe      	rjmp usart_send_try
+000090 9101      	ld r16, Z+
+000091 b90c      	out UDR, r16
+000092 17fd      	cp ZH, YH
+000093 f7d1      	brne usart_send_try
+000094 17ec      	cp ZL, YL
+000095 f7c1      	brne usart_send_try
+000096 e6c0      	ldi YL, LOW(buffer)
+000097 e0d0      	ldi YH, HIGH(buffer)
+000098 9508      	ret
 
 
 RESOURCE USE INFORMATION
@@ -1109,8 +1117,8 @@ counted separately from r26..r31 here.
 "ATmega16" register use summary:
 r0 :   8 r1 :   0 r2 :   0 r3 :   0 r4 :   0 r5 :   0 r6 :   0 r7 :   0 
 r8 :   0 r9 :   0 r10:   0 r11:   0 r12:   0 r13:   0 r14:   0 r15:   0 
-r16:  35 r17:   6 r18:   6 r19:   3 r20:   4 r21:  12 r22:  10 r23:   0 
-r24:   6 r25:   0 r26:   2 r27:   0 r28:   2 r29:   2 r30:   2 r31:   2 
+r16:  39 r17:   6 r18:   6 r19:   3 r20:   4 r21:  12 r22:  10 r23:   0 
+r24:   6 r25:   0 r26:   2 r27:   0 r28:   3 r29:   3 r30:   2 r31:   2 
 x  :   1 y  :   1 z  :   1 
 Registers used: 17 out of 35 (48.6%)
 
@@ -1125,9 +1133,9 @@ clc   :   0 clh   :   0 cli   :   1 cln   :   0 clr   :   0 cls   :   0
 clt   :   0 clv   :   0 clz   :   0 com   :   0 cp    :   2 cpc   :   0 
 cpi   :  15 cpse  :   0 dec   :   4 eor   :   0 fmul  :   0 fmuls :   0 
 fmulsu:   0 icall :   0 ijmp  :   0 in    :   3 inc   :   5 jmp   :   3 
-ld    :   1 ldd   :   0 ldi   :  32 lds   :   0 lpm   :   0 lsl   :   0 
+ld    :   1 ldd   :   0 ldi   :  36 lds   :   0 lpm   :   0 lsl   :   0 
 lsr   :   0 mov   :   6 movw  :   0 mul   :   0 muls  :   0 mulsu :   0 
-neg   :   0 nop   :   1 or    :   0 ori   :   1 out   :  17 pop   :   0 
+neg   :   0 nop   :   1 or    :   0 ori   :   1 out   :  19 pop   :   0 
 push  :   0 rcall :   0 ret   :  13 reti  :   0 rjmp  :   1 rol   :   0 
 ror   :   2 sbc   :   0 sbci  :   0 sbi   :   0 sbic  :   0 sbis  :   1 
 sbiw  :   0 sbr   :   0 sbrc  :   0 sbrs  :   0 sec   :   1 seh   :   0 
@@ -1139,7 +1147,7 @@ Instructions used: 27 out of 113 (23.9%)
 "ATmega16" memory use summary [bytes]:
 Segment   Begin    End      Code   Data   Used    Size   Use%
 ---------------------------------------------------------------
-[.cseg] 0x000000 0x000126    294      0    294   16384   1.8%
+[.cseg] 0x000000 0x000132    306      0    306   16384   1.9%
 [.dseg] 0x000060 0x000260      0    512    512    1024  50.0%
 [.eseg] 0x000000 0x000000      0      0      0     512   0.0%
 

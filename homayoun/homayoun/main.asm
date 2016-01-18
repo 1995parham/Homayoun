@@ -54,11 +54,11 @@ reset_isr:
 	; Stop bit = 1
 	; Parity = None
 	; Data bit = 8
-	ldi r24,(0<<UMSEL)|(1<<UCSZ1)|(1<<URSEL)|(0<<UPM1)|(0<<UPM0)|(0<<UCPOL)|(1<<UCSZ0)|(0<<USBS)|(0<<UCPOL)
+	ldi r24, (0<<UMSEL)|(1<<UCSZ1)|(1<<URSEL)|(0<<UPM1)|(0<<UPM0)|(0<<UCPOL)|(1<<UCSZ0)|(0<<USBS)|(0<<UCPOL)
 	out UCSRC, r24
-	ldi r24,(0<<UCSZ2)|(1<<TXEN)|(0<<RXEN)
+	ldi r24, (0<<UCSZ2)|(1<<TXEN)|(0<<RXEN)
 	out UCSRB, r24
-	ldi r24,(0<<U2X)|(0<<MPCM)
+	ldi r24, (0<<U2X)|(0<<MPCM)
 	out UCSRA, r24
 
 	ldi r16, $FF
@@ -209,6 +209,11 @@ delay_loop_1:
 ; Sned bytes stored in the buffer from
 ; begin to Y
 usart_send:
+	ldi r16, $7F
+	out PORTB, r16
+	ldi r16, $00
+	out PORTC, r16
+
 	ldi ZL, LOW(buffer)
 	ldi ZH, HIGH(buffer)
 usart_send_try:
