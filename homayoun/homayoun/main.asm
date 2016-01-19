@@ -51,7 +51,7 @@ reset_isr:
 	ldi r16, (1 << PD6)
 	out PORTD, r16
 
-	; Set USART baud rate to 19.2kbps with 3.6864Mhz clock
+	; Set USART baud rate to 2400kbps with 16Mhz clock
 	ldi r16, $00
 	out UBRRH, r16
 	ldi r16, $5F
@@ -80,16 +80,14 @@ reset_isr:
 ; to keep key bauncing away :)
 key_poll:
 	wdr
+	call delay
 	in r16, PINA
 	ori r16, $F0
 	cpi r16, $FF
 	breq key_poll
-
-	call delay
-	call delay
 	
 	call key_find
-	
+
 	; Show in seven segment
 	;ldi r16, $0E
 	;out PORTC, r16
@@ -107,16 +105,14 @@ key_poll:
 	out PORTA, r16
 	
 	st Y+, r0
-	ldi r16, 10
-	st Y, r16
-	
+
 	mov r21, r0
 	cpi r21, $3F
-
-	brne key_poll_usart_send
-
-key_poll_usart_send:
+	brne key_poll_ret
 	call usart_send
+	call lcd_clear
+
+key_poll_ret:
 	ret
 
 start:
@@ -240,78 +236,80 @@ key_find_ret:
 	breq key_find_15
 key_find_0:
 	; ENTER
-	ldi r16, 15
+	ldi r16, $0F
 	mov r0, r16
 	ret
 key_find_1:
 	; SET
-	ldi r16, 14
+	ldi r16, $0E
 	mov r0, r16
 	ret
 key_find_2:
-	ldi r16, 0
+	ldi r16, $00
 	mov r0, r16
 	ret
 key_find_3:
 	; MENU
-	ldi r16, 13
+	ldi r16, $0D
 	mov r0, r16
 	ret
 key_find_4:
 	; MODE
-	ldi r16, 12
+	ldi r16, $0C
 	mov r0, r16
 	ret
 key_find_5:
-	ldi r16, 9
+	ldi r16, $09
 	mov r0, r16
 	ret
 key_find_6:
-	ldi r16, 8
+	ldi r16, $08
 	mov r0, r16
 	ret
 key_find_7:
-	ldi r16, 7
+	ldi r16, $07
 	mov r0, r16
 	ret
 key_find_8:
 	; DOWN
-	ldi r16, 11
+	ldi r16, $0B
 	mov r0, r16
 	ret
 key_find_9:
-	ldi r16, 6
+	ldi r16, $06
 	mov r0, r16
 	ret
 key_find_10:
-	ldi r16, 5
+	ldi r16, $05
 	mov r0, r16
 	ret
 key_find_11:
-	ldi r16, 4
+	ldi r16, $04
 	mov r0, r16
 	ret
 key_find_12:
 	; UP
-	ldi r16, 10 
+	ldi r16, $0A 
 	mov r0, r16
 	ret
 key_find_13:
-	ldi r16, 3
+	ldi r16, $03
 	mov r0, r16
 	ret
 key_find_14:
-	ldi r16, 2
+	ldi r16, $02
 	mov r0, r16
 	ret
 key_find_15:
-	ldi r16, 1
+	ldi r16, $01
 	mov r0, r16
 	ret
 	
 
 ; Create delay with repeating nop
 delay:
+	ldi r18, $10
+delay_loop_3:
 	ldi r17, $FF
 delay_loop_2:
 	ldi r16, $FF
@@ -323,6 +321,9 @@ delay_loop_1:
 	dec r17
 	cpi r17, $00
 	brne delay_loop_2
+	dec r18
+	cpi r18, $00
+	brne delay_loop_3
 	ret
 
 ; Sned bytes stored in the buffer from
@@ -343,7 +344,6 @@ usart_send_try:
 	ldi YL, LOW(buffer)
 	ldi YH, HIGH(buffer)
 	ret
-
 
 ; Set dispaly, cursor on .. let's rock :)
 lcd_init:
@@ -372,6 +372,50 @@ lcd_init_busy:
 	out DDRB, r16
 	; Out 0x0F
 	ldi r16, $0F
+	out PORTB, r16
+	; RS = PC3 = 0
+	; RW = PD7 = 0
+	; E = PD6 = 0
+	ldi r16, (0 << PC3)
+	out PORTC, r16
+	ldi r16, (0 << PD7) | (0 << PD6)
+	out PORTD, r16
+	; E = PD6 = 1
+	ldi r16, (1 << PD6)
+	out PORTD, r16
+	; PB0 - PB6 --> output
+	; PB7 --> Input
+	ldi r16, $7F
+	out DDRB, r16
+	ret
+
+; Clear display
+lcd_clear:
+lcd_clear_busy:
+	; E = PD6 = 1
+	ldi r16, (1 << PD6)
+	out PORTD, r16
+	nop
+	; RS = PC3 = 0
+	; RW = PD7 = 1
+	; E = PD6 = 0
+	ldi r16, (0 << PC3)
+	out PORTC, r16
+	ldi r16, (1 << PD7) | (0 << PD6)
+	out PORTD, r16
+	; Check busy flag
+	in r16, PINB
+	ori r16, $7F
+	cpi r16, $FF
+	breq lcd_clear_busy
+	; E = PD6 = 1
+	ldi r16, (1 << PD6)
+	out PORTD, r16
+	; PB0 - PB7 --> Output
+	ldi r16, $FF
+	out DDRB, r16
+	; Out 0x01
+	ldi r16, $01
 	out PORTB, r16
 	; RS = PC3 = 0
 	; RW = PD7 = 0
