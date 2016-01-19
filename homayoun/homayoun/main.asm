@@ -205,7 +205,110 @@ key_find_ret:
 	mov r0, r20
 	add r0, r18
 	dec r0
+	mov r16, r0
+	cpi r16, 0
+	breq key_find_0
+	cpi r16, 1
+	breq key_find_1
+	cpi r16, 2
+	breq key_find_2
+	cpi r16, 3
+	breq key_find_3
+	cpi r16, 4
+	breq key_find_4
+	cpi r16, 5
+	breq key_find_5
+	cpi r16, 6
+	breq key_find_6	
+	cpi r16, 7
+	breq key_find_7
+	cpi r16, 8
+	breq key_find_8
+	cpi r16, 9
+	breq key_find_9
+	cpi r16, 10
+	breq key_find_10
+	cpi r16, 11
+	breq key_find_11
+	cpi r16, 12
+	breq key_find_12
+	cpi r16, 13
+	breq key_find_13
+	cpi r16, 14
+	breq key_find_14
+	cpi r16, 15
+	breq key_find_15
+key_find_0:
+	; ENTER
+	ldi r16, 15
+	mov r0, r16
 	ret
+key_find_1:
+	; SET
+	ldi r16, 14
+	mov r0, r16
+	ret
+key_find_2:
+	ldi r16, 0
+	mov r0, r16
+	ret
+key_find_3:
+	; MENU
+	ldi r16, 13
+	mov r0, r16
+	ret
+key_find_4:
+	; MODE
+	ldi r16, 12
+	mov r0, r16
+	ret
+key_find_5:
+	ldi r16, 9
+	mov r0, r16
+	ret
+key_find_6:
+	ldi r16, 8
+	mov r0, r16
+	ret
+key_find_7:
+	ldi r16, 7
+	mov r0, r16
+	ret
+key_find_8:
+	; DOWN
+	ldi r16, 11
+	mov r0, r16
+	ret
+key_find_9:
+	ldi r16, 6
+	mov r0, r16
+	ret
+key_find_10:
+	ldi r16, 5
+	mov r0, r16
+	ret
+key_find_11:
+	ldi r16, 4
+	mov r0, r16
+	ret
+key_find_12:
+	; UP
+	ldi r16, 10 
+	mov r0, r16
+	ret
+key_find_13:
+	ldi r16, 3
+	mov r0, r16
+	ret
+key_find_14:
+	ldi r16, 2
+	mov r0, r16
+	ret
+key_find_15:
+	ldi r16, 1
+	mov r0, r16
+	ret
+	
 
 ; Create delay with repeating nop
 delay:
