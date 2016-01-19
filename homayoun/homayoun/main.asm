@@ -61,7 +61,7 @@ reset_isr:
 	; Stop bit = 1
 	; Parity = None
 	; Data bit = 8
-	ldi r24, (0 << UMSEL) | (1 << UCSZ1) | (1 << URSEL) | (0 << UPM1) | (0 << UPM0) | (0 << UCPOL) | (1 << UCSZ0) | (0 << USBS) | (0 << UCPOL)
+	ldi r24, (0 << UMSEL) | (1 << UCSZ1) | (1 << URSEL) | (0 << UPM1) | (0 << UPM0) | (0 << UCPOL) | (1 << UCSZ0) | (0 << USBS)
 	out UCSRC, r24
 	ldi r24, (0 << UCSZ2) | (1 << TXEN) | (0 << RXEN)
 	out UCSRB, r24
