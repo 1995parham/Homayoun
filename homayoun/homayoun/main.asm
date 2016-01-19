@@ -54,7 +54,7 @@ reset_isr:
 	; Set USART baud rate to 19.2kbps with 3.6864Mhz clock
 	ldi r16, $00
 	out UBRRH, r16
-	ldi r16, $0B
+	ldi r16, $5F
 	out UBRRL,r16
 
 	; Set USART startup settings
@@ -63,7 +63,7 @@ reset_isr:
 	; Data bit = 8
 	ldi r24, (0 << UMSEL) | (1 << UCSZ1) | (1 << URSEL) | (0 << UPM1) | (0 << UPM0) | (0 << UCPOL) | (1 << UCSZ0) | (0 << USBS) | (0 << UCPOL)
 	out UCSRC, r24
-	ldi r24, (0 << UCSZ2) | (1 << TXEN) | (0 << RXEN)
+	ldi r24, (0 << UCSZ2) | (0 << TXEN) | (0 << RXEN)
 	out UCSRB, r24
 	ldi r24, (0 << U2X) | (0 << MPCM)
 	out UCSRA, r24
@@ -79,6 +79,7 @@ reset_isr:
 ; Keypad interrupt rutine, providing delay
 ; to keep key bauncing away :)
 key_poll:
+	wdr
 	in r16, PINA
 	ori r16, $F0
 	cpi r16, $FF
@@ -106,6 +107,8 @@ key_poll:
 	out PORTA, r16
 	
 	st Y+, r0
+	ldi r16, 10
+	st Y, r16
 	
 	mov r21, r0
 	cpi r21, $3F
@@ -117,6 +120,7 @@ key_poll_usart_send:
 	ret
 
 start:
+	wdr
     call key_poll
     jmp start
 
@@ -209,6 +213,7 @@ delay:
 delay_loop_2:
 	ldi r16, $FF
 delay_loop_1:
+	wdr
 	dec r16
 	cpi r16, $00
 	brne delay_loop_1
@@ -222,7 +227,10 @@ delay_loop_1:
 usart_send:
 	ldi ZL, LOW(buffer)
 	ldi ZH, HIGH(buffer)
+	ldi r16, (1 << TXEN)
+	out UCSRB, r16
 usart_send_try:
+	wdr
     sbis UCSRA, UDRE
 	rjmp usart_send_try
 	ld r16, Z+
@@ -233,6 +241,8 @@ usart_send_try:
 	brne usart_send_try
 	ldi YL, LOW(buffer)
 	ldi YH, HIGH(buffer)
+	ldi r16, (0 << TXEN)
+	out UCSRB, r16
 	ret
 
 
