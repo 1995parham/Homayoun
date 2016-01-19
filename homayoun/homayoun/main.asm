@@ -63,7 +63,7 @@ reset_isr:
 	; Data bit = 8
 	ldi r24, (0 << UMSEL) | (1 << UCSZ1) | (1 << URSEL) | (0 << UPM1) | (0 << UPM0) | (0 << UCPOL) | (1 << UCSZ0) | (0 << USBS) | (0 << UCPOL)
 	out UCSRC, r24
-	ldi r24, (0 << UCSZ2) | (0 << TXEN) | (0 << RXEN)
+	ldi r24, (0 << UCSZ2) | (1 << TXEN) | (0 << RXEN)
 	out UCSRB, r24
 	ldi r24, (0 << U2X) | (0 << MPCM)
 	out UCSRA, r24
@@ -330,8 +330,6 @@ delay_loop_1:
 usart_send:
 	ldi ZL, LOW(buffer)
 	ldi ZH, HIGH(buffer)
-	ldi r16, (1 << TXEN)
-	out UCSRB, r16
 usart_send_try:
 	wdr
     sbis UCSRA, UDRE
@@ -344,8 +342,6 @@ usart_send_try:
 	brne usart_send_try
 	ldi YL, LOW(buffer)
 	ldi YH, HIGH(buffer)
-	ldi r16, (0 << TXEN)
-	out UCSRB, r16
 	ret
 
 
