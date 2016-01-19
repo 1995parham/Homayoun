@@ -1,3 +1,6 @@
+# Atmel Studio files
+.vs/
+
 # Proteus files
 *.pdsbak
 *.workspace
