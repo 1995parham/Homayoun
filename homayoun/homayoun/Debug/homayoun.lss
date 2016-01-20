@@ -1,5 +1,5 @@
 
-AVRASM ver. 2.1.57  Z:\Documents\Git\parham\homayoun\homayoun\homayoun\main.asm Wed Jan 20 09:36:51 2016
+AVRASM ver. 2.1.57  Z:\Documents\Git\parham\homayoun\homayoun\homayoun\main.asm Wed Jan 20 13:19:56 2016
 
 [builtin](2): Including file 'C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.0.90\avrasm\inc\m16def.inc'
                  
@@ -943,7 +943,7 @@ AVRASM ver. 2.1.57  Z:\Documents\Git\parham\homayoun\homayoun\homayoun\main.asm 
 000021 bb04      	out DDRC, r16
                  	
 000022 940e 00f3 	call lcd_function_set
-000024 940e 0127 	call lcd_init
+000024 940e 012b 	call lcd_init
 000026 9478      	sei
 000027 940c 0040 	jmp start
                  
@@ -967,7 +967,7 @@ AVRASM ver. 2.1.57  Z:\Documents\Git\parham\homayoun\homayoun\homayoun\main.asm 
                  	;out PORTB, r22
                  
                  	; Show in LCD
-000033 940e 016e 	call lcd_write
+000033 940e 0185 	call lcd_write
                  
 000035 e00f      	ldi r16, $0F
 000036 bb0b      	out PORTA, r16
@@ -978,7 +978,7 @@ AVRASM ver. 2.1.57  Z:\Documents\Git\parham\homayoun\homayoun\homayoun\main.asm 
 000039 305a      	cpi r21, '\n'
 00003a f421      	brne key_poll_ret
 00003b 940e 00e2 	call usart_send
-00003d 940e 0154 	call lcd_clear
+00003d 940e 0158 	call lcd_clear
                  
                  key_poll_ret:
 00003f 9508      	ret
@@ -1234,234 +1234,305 @@ AVRASM ver. 2.1.57  Z:\Documents\Git\parham\homayoun\homayoun\homayoun\main.asm 
 0000fa bb05      	out PORTC, r16
 0000fb e000      	ldi r16, (0 << PD7) | (0 << PD6)
 0000fc bb02      	out PORTD, r16
-                 lcd_function_set_busy:
-                 	; E = PD6 = 1
-0000fd e400      	ldi r16, (1 << PD6)
-0000fe bb02      	out PORTD, r16
-0000ff 0000      	nop
-                 	; RS = PC3 = 0
-                 	; RW = PD7 = 1
-                 	; E = PD6 = 0
-000100 e000      	ldi r16, (0 << PC3)
-000101 bb05      	out PORTC, r16
-000102 e800      	ldi r16, (1 << PD7) | (0 << PD6)
-000103 bb02      	out PORTD, r16
-                 	; Get busy flag
-000104 b306      	in r16, PINB
-000105 2f10      	mov r17, r16
-                 	; E = PD6 = 1
-000106 e400      	ldi r16, (1 << PD6)
-000107 bb02      	out PORTD, r16
-000108 0000      	nop
-                 	; RS = PC3 = 0
-                 	; RW = PD7 = 1
-                 	; E = PD6 = 0
-000109 e000      	ldi r16, (0 << PC3)
-00010a bb05      	out PORTC, r16
-00010b e800      	ldi r16, (1 << PD7) | (0 << PD6)
-00010c bb02      	out PORTD, r16
-                 	; destroy chert flag :D
-00010d b306      	in r16, PINB
-                 	; Restore busy flag
-00010e 2f01      	mov r16, r17
-00010f 670f      	ori r16, $7F
-000110 3f0f      	cpi r16, $FF
-000111 f0a9      	breq lcd_init_busy
-                 	; E = PD6 = 1
-000112 e400      	ldi r16, (1 << PD6)
-000113 bb02      	out PORTD, r16
-                 	; Out HIGH($20)
-000114 e200      	ldi r16, $20
-000115 bb08      	out PORTB, r16
-                 	; RS = PC3 = 0
-                 	; RW = PD7 = 0
-                 	; E = PD6 = 0
-000116 e000      	ldi r16, (0 << PC3)
-000117 bb05      	out PORTC, r16
-000118 e000      	ldi r16, (0 << PD7) | (0 << PD6)
-000119 bb02      	out PORTD, r16
-                 	; E = PD6 = 1
-00011a e400      	ldi r16, (1 << PD6)
-00011b bb02      	out PORTD, r16
-                 	; Out LOW($20)
-00011c e000      	ldi r16, $00
-00011d bb08      	out PORTB, r16
-                 	; RS = PC3 = 0
-                 	; RW = PD7 = 0
-                 	; E = PD6 = 0
-00011e e000      	ldi r16, (0 << PC3)
-00011f bb05      	out PORTC, r16
-000120 e000      	ldi r16, (0 << PD7) | (0 << PD6)
-000121 bb02      	out PORTD, r16
-                 	; E = PD6 = 1
-000122 e400      	ldi r16, (1 << PD6)
-000123 bb02      	out PORTD, r16
                  	; PB0 - PB6 --> output
                  	; PB7 --> Input
-000124 e70f      	ldi r16, $7F
-000125 bb07      	out DDRB, r16
-000126 9508      	ret
+0000fd e70f      	ldi r16, $7F
+0000fe bb07      	out DDRB, r16
+                 lcd_function_set_busy:
+                 	; E = PD6 = 1
+0000ff e400      	ldi r16, (1 << PD6)
+000100 bb02      	out PORTD, r16
+000101 0000      	nop
+                 	; RS = PC3 = 0
+                 	; RW = PD7 = 1
+                 	; E = PD6 = 0
+000102 e000      	ldi r16, (0 << PC3)
+000103 bb05      	out PORTC, r16
+000104 e800      	ldi r16, (1 << PD7) | (0 << PD6)
+000105 bb02      	out PORTD, r16
+                 	; Get busy flag
+000106 b306      	in r16, PINB
+000107 2f10      	mov r17, r16
+                 	; E = PD6 = 1
+000108 e400      	ldi r16, (1 << PD6)
+000109 bb02      	out PORTD, r16
+00010a 0000      	nop
+                 	; RS = PC3 = 0
+                 	; RW = PD7 = 1
+                 	; E = PD6 = 0
+00010b e000      	ldi r16, (0 << PC3)
+00010c bb05      	out PORTC, r16
+00010d e800      	ldi r16, (1 << PD7) | (0 << PD6)
+00010e bb02      	out PORTD, r16
+                 	; destroy chert flag :D
+00010f b306      	in r16, PINB
+                 	; Restore busy flag
+000110 2f01      	mov r16, r17
+000111 670f      	ori r16, $7F
+000112 3f0f      	cpi r16, $FF
+000113 f359      	breq lcd_function_set_busy
+                 	; E = PD6 = 1
+000114 e400      	ldi r16, (1 << PD6)
+000115 bb02      	out PORTD, r16
+                 	; PB0 - PB7 --> Output
+000116 ef0f      	ldi r16, $FF
+000117 bb07      	out DDRB, r16
+                 	; Out HIGH($20)
+000118 e200      	ldi r16, $20
+000119 bb08      	out PORTB, r16
+                 	; RS = PC3 = 0
+                 	; RW = PD7 = 0
+                 	; E = PD6 = 0
+00011a e000      	ldi r16, (0 << PC3)
+00011b bb05      	out PORTC, r16
+00011c e000      	ldi r16, (0 << PD7) | (0 << PD6)
+00011d bb02      	out PORTD, r16
+                 	; E = PD6 = 1
+00011e e400      	ldi r16, (1 << PD6)
+00011f bb02      	out PORTD, r16
+                 	; Out LOW($20)
+000120 e000      	ldi r16, $00
+000121 bb08      	out PORTB, r16
+                 	; RS = PC3 = 0
+                 	; RW = PD7 = 0
+                 	; E = PD6 = 0
+000122 e000      	ldi r16, (0 << PC3)
+000123 bb05      	out PORTC, r16
+000124 e000      	ldi r16, (0 << PD7) | (0 << PD6)
+000125 bb02      	out PORTD, r16
+                 	; E = PD6 = 1
+000126 e400      	ldi r16, (1 << PD6)
+000127 bb02      	out PORTD, r16
+                 	; PB0 - PB6 --> output
+                 	; PB7 --> Input
+000128 e70f      	ldi r16, $7F
+000129 bb07      	out DDRB, r16
+00012a 9508      	ret
                  	
                  ; Set dispaly, cursor on .. let's rock :)
                  lcd_init:
                  lcd_init_busy:
                  	; E = PD6 = 1
-000127 e400      	ldi r16, (1 << PD6)
-000128 bb02      	out PORTD, r16
-000129 0000      	nop
+00012b e400      	ldi r16, (1 << PD6)
+00012c bb02      	out PORTD, r16
+00012d 0000      	nop
                  	; RS = PC3 = 0
                  	; RW = PD7 = 1
                  	; E = PD6 = 0
-00012a e000      	ldi r16, (0 << PC3)
-00012b bb05      	out PORTC, r16
-00012c e800      	ldi r16, (1 << PD7) | (0 << PD6)
-00012d bb02      	out PORTD, r16
-                 	; Get busy flag
-00012e b306      	in r16, PINB
-00012f 2f10      	mov r17, r16
-                 	; E = PD6 = 1
-000130 e400      	ldi r16, (1 << PD6)
+00012e e000      	ldi r16, (0 << PC3)
+00012f bb05      	out PORTC, r16
+000130 e800      	ldi r16, (1 << PD7) | (0 << PD6)
 000131 bb02      	out PORTD, r16
-000132 0000      	nop
+                 	; Get busy flag
+000132 b306      	in r16, PINB
+000133 2f10      	mov r17, r16
+                 	; E = PD6 = 1
+000134 e400      	ldi r16, (1 << PD6)
+000135 bb02      	out PORTD, r16
+000136 0000      	nop
                  	; RS = PC3 = 0
                  	; RW = PD7 = 1
                  	; E = PD6 = 0
-000133 e000      	ldi r16, (0 << PC3)
-000134 bb05      	out PORTC, r16
-000135 e800      	ldi r16, (1 << PD7) | (0 << PD6)
-000136 bb02      	out PORTD, r16
+000137 e000      	ldi r16, (0 << PC3)
+000138 bb05      	out PORTC, r16
+000139 e800      	ldi r16, (1 << PD7) | (0 << PD6)
+00013a bb02      	out PORTD, r16
                  	; destroy chert flag :D
-000137 b306      	in r16, PINB
+00013b b306      	in r16, PINB
                  	; Restore busy flag
-000138 2f01      	mov r16, r17
-000139 670f      	ori r16, $7F
-00013a 3f0f      	cpi r16, $FF
-00013b f359      	breq lcd_init_busy
+00013c 2f01      	mov r16, r17
+00013d 670f      	ori r16, $7F
+00013e 3f0f      	cpi r16, $FF
+00013f f359      	breq lcd_init_busy
                  	; E = PD6 = 1
-00013c e400      	ldi r16, (1 << PD6)
-00013d bb02      	out PORTD, r16
+000140 e400      	ldi r16, (1 << PD6)
+000141 bb02      	out PORTD, r16
                  	; PB0 - PB7 --> Output
-00013e ef0f      	ldi r16, $FF
-00013f bb07      	out DDRB, r16
+000142 ef0f      	ldi r16, $FF
+000143 bb07      	out DDRB, r16
                  	; Out HIGH(0x0F)
-000140 e000      	ldi r16, $00
-000141 bb08      	out PORTB, r16
+000144 e000      	ldi r16, $00
+000145 bb08      	out PORTB, r16
                  	; RS = PC3 = 0
                  	; RW = PD7 = 0
                  	; E = PD6 = 0
-000142 e000      	ldi r16, (0 << PC3)
-000143 bb05      	out PORTC, r16
-000144 e000      	ldi r16, (0 << PD7) | (0 << PD6)
-000145 bb02      	out PORTD, r16
+000146 e000      	ldi r16, (0 << PC3)
+000147 bb05      	out PORTC, r16
+000148 e000      	ldi r16, (0 << PD7) | (0 << PD6)
+000149 bb02      	out PORTD, r16
                  	; E = PD6 = 1
-000146 e400      	ldi r16, (1 << PD6)
-000147 bb02      	out PORTD, r16
-000148 0000      	nop
+00014a e400      	ldi r16, (1 << PD6)
+00014b bb02      	out PORTD, r16
+00014c 0000      	nop
                  	; Out LOW(0x0F)
-000149 ef00      	ldi r16, $F0
-00014a bb08      	out PORTB, r16
+00014d ef00      	ldi r16, $F0
+00014e bb08      	out PORTB, r16
                  	; RS = PC3 = 0
                  	; RW = PD7 = 0
                  	; E = PD6 = 0
-00014b e000      	ldi r16, (0 << PC3)
-00014c bb05      	out PORTC, r16
-00014d e000      	ldi r16, (0 << PD7) | (0 << PD6)
-00014e bb02      	out PORTD, r16
+00014f e000      	ldi r16, (0 << PC3)
+000150 bb05      	out PORTC, r16
+000151 e000      	ldi r16, (0 << PD7) | (0 << PD6)
+000152 bb02      	out PORTD, r16
                  	; E = PD6 = 1
-00014f e400      	ldi r16, (1 << PD6)
-000150 bb02      	out PORTD, r16
+000153 e400      	ldi r16, (1 << PD6)
+000154 bb02      	out PORTD, r16
                  	; PB0 - PB6 --> output
                  	; PB7 --> Input
-000151 e70f      	ldi r16, $7F
-000152 bb07      	out DDRB, r16
-000153 9508      	ret
+000155 e70f      	ldi r16, $7F
+000156 bb07      	out DDRB, r16
+000157 9508      	ret
                  
                  ; Clear display
                  lcd_clear:
                  lcd_clear_busy:
                  	; E = PD6 = 1
-000154 e400      	ldi r16, (1 << PD6)
-000155 bb02      	out PORTD, r16
-000156 0000      	nop
+000158 e400      	ldi r16, (1 << PD6)
+000159 bb02      	out PORTD, r16
+00015a 0000      	nop
                  	; RS = PC3 = 0
                  	; RW = PD7 = 1
                  	; E = PD6 = 0
-000157 e000      	ldi r16, (0 << PC3)
-000158 bb05      	out PORTC, r16
-000159 e800      	ldi r16, (1 << PD7) | (0 << PD6)
-00015a bb02      	out PORTD, r16
-                 	; Check busy flag
-00015b b306      	in r16, PINB
-00015c 670f      	ori r16, $7F
-00015d 3f0f      	cpi r16, $FF
-00015e f3a9      	breq lcd_clear_busy
+00015b e000      	ldi r16, (0 << PC3)
+00015c bb05      	out PORTC, r16
+00015d e800      	ldi r16, (1 << PD7) | (0 << PD6)
+00015e bb02      	out PORTD, r16
+                 	; Get busy flag
+00015f b306      	in r16, PINB
+000160 2f10      	mov r17, r16
                  	; E = PD6 = 1
-00015f e400      	ldi r16, (1 << PD6)
-000160 bb02      	out PORTD, r16
+000161 e400      	ldi r16, (1 << PD6)
+000162 bb02      	out PORTD, r16
+000163 0000      	nop
+                 	; RS = PC3 = 0
+                 	; RW = PD7 = 1
+                 	; E = PD6 = 0
+000164 e000      	ldi r16, (0 << PC3)
+000165 bb05      	out PORTC, r16
+000166 e800      	ldi r16, (1 << PD7) | (0 << PD6)
+000167 bb02      	out PORTD, r16
+                 	; destroy chert flag :D
+000168 b306      	in r16, PINB
+                 	; Restore busy flag
+000169 2f01      	mov r16, r17
+00016a 670f      	ori r16, $7F
+00016b 3f0f      	cpi r16, $FF
+00016c f359      	breq lcd_clear_busy
+                 	; E = PD6 = 1
+00016d e400      	ldi r16, (1 << PD6)
+00016e bb02      	out PORTD, r16
                  	; PB0 - PB7 --> Output
-000161 ef0f      	ldi r16, $FF
-000162 bb07      	out DDRB, r16
-                 	; Out 0x01
-000163 e001      	ldi r16, $01
-000164 bb08      	out PORTB, r16
+00016f ef0f      	ldi r16, $FF
+000170 bb07      	out DDRB, r16
+                 	; Out HIGH(0x01)
+000171 e000      	ldi r16, $00
+000172 bb08      	out PORTB, r16
                  	; RS = PC3 = 0
                  	; RW = PD7 = 0
                  	; E = PD6 = 0
-000165 e000      	ldi r16, (0 << PC3)
-000166 bb05      	out PORTC, r16
-000167 e000      	ldi r16, (0 << PD7) | (0 << PD6)
-000168 bb02      	out PORTD, r16
+000173 e000      	ldi r16, (0 << PC3)
+000174 bb05      	out PORTC, r16
+000175 e000      	ldi r16, (0 << PD7) | (0 << PD6)
+000176 bb02      	out PORTD, r16
                  	; E = PD6 = 1
-000169 e400      	ldi r16, (1 << PD6)
-00016a bb02      	out PORTD, r16
+000177 e400      	ldi r16, (1 << PD6)
+000178 bb02      	out PORTD, r16
+000179 0000      	nop
+                 	; Out LOW(0x01)
+00017a e100      	ldi r16, $10
+00017b bb08      	out PORTB, r16
+                 	; RS = PC3 = 0
+                 	; RW = PD7 = 0
+                 	; E = PD6 = 0
+00017c e000      	ldi r16, (0 << PC3)
+00017d bb05      	out PORTC, r16
+00017e e000      	ldi r16, (0 << PD7) | (0 << PD6)
+00017f bb02      	out PORTD, r16
+                 	; E = PD6 = 1
+000180 e400      	ldi r16, (1 << PD6)
+000181 bb02      	out PORTD, r16
                  	; PB0 - PB6 --> output
                  	; PB7 --> Input
-00016b e70f      	ldi r16, $7F
-00016c bb07      	out DDRB, r16
-00016d 9508      	ret
+000182 e70f      	ldi r16, $7F
+000183 bb07      	out DDRB, r16
+000184 9508      	ret
                  
                  ; Send one byte stored in r0 into LCD
                  lcd_write:
                  lcd_write_busy:
                  	; E = PD6 = 1
-00016e e400      	ldi r16, (1 << PD6)
-00016f bb02      	out PORTD, r16
-000170 0000      	nop
+000185 e400      	ldi r16, (1 << PD6)
+000186 bb02      	out PORTD, r16
+000187 0000      	nop
                  	; RS = PC3 = 0
                  	; RW = PD7 = 1
                  	; E = PD6 = 0
-000171 e000      	ldi r16, (0 << PC3)
-000172 bb05      	out PORTC, r16
-000173 e800      	ldi r16, (1 << PD7) | (0 << PD6)
-000174 bb02      	out PORTD, r16
-                 	; Check busy flag
-000175 b306      	in r16, PINB
-000176 670f      	ori r16, $7F
-000177 3f0f      	cpi r16, $FF
-000178 f3a9      	breq lcd_write_busy
+000188 e000      	ldi r16, (0 << PC3)
+000189 bb05      	out PORTC, r16
+00018a e800      	ldi r16, (1 << PD7) | (0 << PD6)
+00018b bb02      	out PORTD, r16
+                 	; Get busy flag
+00018c b306      	in r16, PINB
+00018d 2f10      	mov r17, r16
                  	; E = PD6 = 1
-000179 e400      	ldi r16, (1 << PD6)
-00017a bb02      	out PORTD, r16
+                 	; RW = PD7 = 1
+00018e ec00      	ldi r16, (1 << PD6) | (1 << PD7)
+00018f bb02      	out PORTD, r16
+000190 0000      	nop
+                 	; RS = PC3 = 0
+                 	; RW = PD7 = 1
+                 	; E = PD6 = 0
+000191 e000      	ldi r16, (0 << PC3)
+000192 bb05      	out PORTC, r16
+000193 e800      	ldi r16, (1 << PD7) | (0 << PD6)
+000194 bb02      	out PORTD, r16
+                 	; destroy chert flag :D
+000195 b306      	in r16, PINB
+                 	; Restore busy flag
+000196 2f01      	mov r16, r17
+000197 670f      	ori r16, $7F
+000198 3f0f      	cpi r16, $FF
+000199 f359      	breq lcd_write_busy
+00019a 940e 00d4 	call delay
+                 	; E = PD6 = 1
+00019c e400      	ldi r16, (1 << PD6)
+00019d bb02      	out PORTD, r16
                  	; PB0 - PB7 --> Output
-00017b ef0f      	ldi r16, $FF
-00017c bb07      	out DDRB, r16
-                 	; Out r0
-00017d 2d00      	mov r16, r0
-00017e bb08      	out PORTB, r16
+00019e ef0f      	ldi r16, $FF
+00019f bb07      	out DDRB, r16
+                 	; Out HIGH(r0)
+0001a0 2d00      	mov r16, r0
+0001a1 bb08      	out PORTB, r16
                  	; RS = PC3 = 1
                  	; RW = PD7 = 0
                  	; E = PD6 = 0
-00017f e008      	ldi r16, (1 << PC3)
-000180 bb05      	out PORTC, r16
-000181 e000      	ldi r16, (0 << PD7) | (0 << PD6)
-000182 bb02      	out PORTD, r16
+0001a2 e008      	ldi r16, (1 << PC3)
+0001a3 bb05      	out PORTC, r16
+0001a4 e000      	ldi r16, (0 << PD7) | (0 << PD6)
+0001a5 bb02      	out PORTD, r16
                  	; E = PD6 = 1
-000183 e400      	ldi r16, (1 << PD6)
-000184 bb02      	out PORTD, r16
+0001a6 e400      	ldi r16, (1 << PD6)
+0001a7 bb02      	out PORTD, r16
+0001a8 0000      	nop
+0001a9 0000      	nop
+                 	; Out LOW(r0)
+0001aa 2d00      	mov r16, r0
+0001ab 9502      	swap r16
+0001ac bb08      	out PORTB, r16
+                 	; RS = PC3 = 1
+                 	; RW = PD7 = 0
+                 	; E = PD6 = 0
+0001ad e008      	ldi r16, (1 << PC3)
+0001ae bb05      	out PORTC, r16
+0001af e000      	ldi r16, (0 << PD7) | (0 << PD6)
+0001b0 bb02      	out PORTD, r16
+                 	; E = PD6 = 1
+0001b1 e400      	ldi r16, (1 << PD6)
+0001b2 bb02      	out PORTD, r16
                  	; PB0 - PB6 --> output
                  	; PB7 --> Input
-000185 e70f      	ldi r16, $7F
-000186 bb07      	out DDRB, r16
+0001b3 e70f      	ldi r16, $7F
+0001b4 bb07      	out DDRB, r16
 
 
 RESOURCE USE INFORMATION
@@ -1479,9 +1550,9 @@ counted separately from r26..r31 here.
 .dseg memory usage only counts static data declared with .byte
 
 "ATmega16" register use summary:
-r0 :  24 r1 :   0 r2 :   0 r3 :   0 r4 :   0 r5 :   0 r6 :   0 r7 :   0 
+r0 :  25 r1 :   0 r2 :   0 r3 :   0 r4 :   0 r5 :   0 r6 :   0 r7 :   0 
 r8 :   0 r9 :   0 r10:   0 r11:   0 r12:   0 r13:   0 r14:   0 r15:   0 
-r16: 222 r17:  10 r18:   9 r19:   3 r20:   4 r21:  12 r22:   9 r23:   0 
+r16: 261 r17:  14 r18:   9 r19:   3 r20:   4 r21:  12 r22:   9 r23:   0 
 r24:   6 r25:   0 r26:   0 r27:   0 r28:   3 r29:   3 r30:   2 r31:   2 
 x  :   0 y  :   1 z  :   2 
 Registers used: 15 out of 35 (42.9%)
@@ -1492,26 +1563,26 @@ andi  :   1 asr   :   0 bclr  :   0 bld   :   0 brbc  :   0 brbs  :   0
 brcc  :   1 brcs  :   0 break :   0 breq  :  30 brge  :   0 brhc  :   0 
 brhs  :   0 brid  :   0 brie  :   0 brlo  :   0 brlt  :   0 brmi  :   0 
 brne  :   8 brpl  :   0 brsh  :   0 brtc  :   0 brts  :   0 brvc  :   0 
-brvs  :   0 bset  :   0 bst   :   0 call  :   8 cbi   :   0 cbr   :   0 
+brvs  :   0 bset  :   0 bst   :   0 call  :   9 cbi   :   0 cbr   :   0 
 clc   :   0 clh   :   0 cli   :   1 cln   :   0 clr   :   0 cls   :   0 
 clt   :   0 clv   :   0 clz   :   0 com   :   0 cp    :   2 cpc   :   0 
 cpi   :  36 cpse  :   0 dec   :   5 eor   :   0 fmul  :   0 fmuls :   0 
-fmulsu:   0 icall :   0 ijmp  :   0 in    :   9 inc   :   5 jmp   :   3 
-ld    :   1 ldd   :   0 ldi   : 110 lds   :   0 lpm   :   0 lsl   :   0 
-lsr   :   0 mov   :  26 movw  :   0 mul   :   0 muls  :   0 mulsu :   0 
-neg   :   0 nop   :   8 or    :   0 ori   :   5 out   :  75 pop   :   0 
+fmulsu:   0 icall :   0 ijmp  :   0 in    :  11 inc   :   5 jmp   :   3 
+ld    :   1 ldd   :   0 ldi   : 125 lds   :   0 lpm   :   0 lsl   :   0 
+lsr   :   0 mov   :  31 movw  :   0 mul   :   0 muls  :   0 mulsu :   0 
+neg   :   0 nop   :  13 or    :   0 ori   :   5 out   :  91 pop   :   0 
 push  :   0 rcall :   0 ret   :  32 reti  :   0 rjmp  :   1 rol   :   0 
 ror   :   2 sbc   :   0 sbci  :   0 sbi   :   0 sbic  :   0 sbis  :   1 
 sbiw  :   0 sbr   :   0 sbrc  :   0 sbrs  :   0 sec   :   1 seh   :   0 
 sei   :   1 sen   :   0 ser   :   0 ses   :   0 set   :   0 sev   :   0 
 sez   :   0 sleep :   0 spm   :   0 st    :   2 std   :   0 sts   :   0 
-sub   :   0 subi  :   0 swap  :   0 tst   :   0 wdr   :   6 
-Instructions used: 27 out of 113 (23.9%)
+sub   :   0 subi  :   0 swap  :   1 tst   :   0 wdr   :   6 
+Instructions used: 28 out of 113 (24.8%)
 
 "ATmega16" memory use summary [bytes]:
 Segment   Begin    End      Code   Data   Used    Size   Use%
 ---------------------------------------------------------------
-[.cseg] 0x000000 0x000310    784      0    784   16384   4.8%
+[.cseg] 0x000000 0x00036c    876      0    876   16384   5.3%
 [.dseg] 0x000060 0x000260      0    512    512    1024  50.0%
 [.eseg] 0x000000 0x000000      0      0      0     512   0.0%
 

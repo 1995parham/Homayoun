@@ -27,15 +27,15 @@
   <reset_label><FILE>Z:\Documents\Git\parham\homayoun\homayoun\homayoun\main.asm</FILE><LINE>19</LINE></reset_label>
   <reset_isr><FILE>Z:\Documents\Git\parham\homayoun\homayoun\homayoun\main.asm</FILE><LINE>22</LINE></reset_isr>
   <lcd_function_set><FILE>Z:\Documents\Git\parham\homayoun\homayoun\homayoun\main.asm</FILE><LINE>350</LINE></lcd_function_set>
-  <lcd_init><FILE>Z:\Documents\Git\parham\homayoun\homayoun\homayoun\main.asm</FILE><LINE>436</LINE></lcd_init>
+  <lcd_init><FILE>Z:\Documents\Git\parham\homayoun\homayoun\homayoun\main.asm</FILE><LINE>443</LINE></lcd_init>
   <start><FILE>Z:\Documents\Git\parham\homayoun\homayoun\homayoun\main.asm</FILE><LINE>116</LINE></start>
   <key_poll><FILE>Z:\Documents\Git\parham\homayoun\homayoun\homayoun\main.asm</FILE><LINE>82</LINE></key_poll>
   <delay><FILE>Z:\Documents\Git\parham\homayoun\homayoun\homayoun\main.asm</FILE><LINE>308</LINE></delay>
   <key_find><FILE>Z:\Documents\Git\parham\homayoun\homayoun\homayoun\main.asm</FILE><LINE>173</LINE></key_find>
-  <lcd_write><FILE>Z:\Documents\Git\parham\homayoun\homayoun\homayoun\main.asm</FILE><LINE>554</LINE></lcd_write>
+  <lcd_write><FILE>Z:\Documents\Git\parham\homayoun\homayoun\homayoun\main.asm</FILE><LINE>591</LINE></lcd_write>
   <key_poll_ret><FILE>Z:\Documents\Git\parham\homayoun\homayoun\homayoun\main.asm</FILE><LINE>113</LINE></key_poll_ret>
   <usart_send><FILE>Z:\Documents\Git\parham\homayoun\homayoun\homayoun\main.asm</FILE><LINE>329</LINE></usart_send>
-  <lcd_clear><FILE>Z:\Documents\Git\parham\homayoun\homayoun\homayoun\main.asm</FILE><LINE>510</LINE></lcd_clear>
+  <lcd_clear><FILE>Z:\Documents\Git\parham\homayoun\homayoun\homayoun\main.asm</FILE><LINE>517</LINE></lcd_clear>
   <seven_seg><FILE>Z:\Documents\Git\parham\homayoun\homayoun\homayoun\main.asm</FILE><LINE>123</LINE></seven_seg>
   <seven_seg_1><FILE>Z:\Documents\Git\parham\homayoun\homayoun\homayoun\main.asm</FILE><LINE>143</LINE></seven_seg_1>
   <seven_seg_2><FILE>Z:\Documents\Git\parham\homayoun\homayoun\homayoun\main.asm</FILE><LINE>146</LINE></seven_seg_2>
@@ -69,9 +69,9 @@
   <delay_loop_2><FILE>Z:\Documents\Git\parham\homayoun\homayoun\homayoun\main.asm</FILE><LINE>312</LINE></delay_loop_2>
   <delay_loop_1><FILE>Z:\Documents\Git\parham\homayoun\homayoun\homayoun\main.asm</FILE><LINE>314</LINE></delay_loop_1>
   <usart_send_try><FILE>Z:\Documents\Git\parham\homayoun\homayoun\homayoun\main.asm</FILE><LINE>332</LINE></usart_send_try>
-  <lcd_function_set_busy><FILE>Z:\Documents\Git\parham\homayoun\homayoun\homayoun\main.asm</FILE><LINE>367</LINE></lcd_function_set_busy>
-  <lcd_init_busy><FILE>Z:\Documents\Git\parham\homayoun\homayoun\homayoun\main.asm</FILE><LINE>437</LINE></lcd_init_busy>
-  <lcd_clear_busy><FILE>Z:\Documents\Git\parham\homayoun\homayoun\homayoun\main.asm</FILE><LINE>511</LINE></lcd_clear_busy>
-  <lcd_write_busy><FILE>Z:\Documents\Git\parham\homayoun\homayoun\homayoun\main.asm</FILE><LINE>555</LINE></lcd_write_busy>
+  <lcd_function_set_busy><FILE>Z:\Documents\Git\parham\homayoun\homayoun\homayoun\main.asm</FILE><LINE>371</LINE></lcd_function_set_busy>
+  <lcd_init_busy><FILE>Z:\Documents\Git\parham\homayoun\homayoun\homayoun\main.asm</FILE><LINE>444</LINE></lcd_init_busy>
+  <lcd_clear_busy><FILE>Z:\Documents\Git\parham\homayoun\homayoun\homayoun\main.asm</FILE><LINE>518</LINE></lcd_clear_busy>
+  <lcd_write_busy><FILE>Z:\Documents\Git\parham\homayoun\homayoun\homayoun\main.asm</FILE><LINE>592</LINE></lcd_write_busy>
  </LABELS>
 </ASSEMBLER_INFO>

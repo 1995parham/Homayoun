@@ -364,6 +364,10 @@ lcd_function_set:
 	out PORTC, r16
 	ldi r16, (0 << PD7) | (0 << PD6)
 	out PORTD, r16
+	; PB0 - PB6 --> output
+	; PB7 --> Input
+	ldi r16, $7F
+	out DDRB, r16
 lcd_function_set_busy:
 	; E = PD6 = 1
 	ldi r16, (1 << PD6)
@@ -396,10 +400,13 @@ lcd_function_set_busy:
 	mov r16, r17
 	ori r16, $7F
 	cpi r16, $FF
-	breq lcd_init_busy
+	breq lcd_function_set_busy
 	; E = PD6 = 1
 	ldi r16, (1 << PD6)
 	out PORTD, r16
+	; PB0 - PB7 --> Output
+	ldi r16, $FF
+	out DDRB, r16
 	; Out HIGH($20)
 	ldi r16, $20
 	out PORTB, r16
@@ -520,8 +527,24 @@ lcd_clear_busy:
 	out PORTC, r16
 	ldi r16, (1 << PD7) | (0 << PD6)
 	out PORTD, r16
-	; Check busy flag
+	; Get busy flag
 	in r16, PINB
+	mov r17, r16
+	; E = PD6 = 1
+	ldi r16, (1 << PD6)
+	out PORTD, r16
+	nop
+	; RS = PC3 = 0
+	; RW = PD7 = 1
+	; E = PD6 = 0
+	ldi r16, (0 << PC3)
+	out PORTC, r16
+	ldi r16, (1 << PD7) | (0 << PD6)
+	out PORTD, r16
+	; destroy chert flag :D
+	in r16, PINB
+	; Restore busy flag
+	mov r16, r17
 	ori r16, $7F
 	cpi r16, $FF
 	breq lcd_clear_busy
@@ -531,8 +554,22 @@ lcd_clear_busy:
 	; PB0 - PB7 --> Output
 	ldi r16, $FF
 	out DDRB, r16
-	; Out 0x01
-	ldi r16, $01
+	; Out HIGH(0x01)
+	ldi r16, $00
+	out PORTB, r16
+	; RS = PC3 = 0
+	; RW = PD7 = 0
+	; E = PD6 = 0
+	ldi r16, (0 << PC3)
+	out PORTC, r16
+	ldi r16, (0 << PD7) | (0 << PD6)
+	out PORTD, r16
+	; E = PD6 = 1
+	ldi r16, (1 << PD6)
+	out PORTD, r16
+	nop
+	; Out LOW(0x01)
+	ldi r16, $10
 	out PORTB, r16
 	; RS = PC3 = 0
 	; RW = PD7 = 0
@@ -564,8 +601,25 @@ lcd_write_busy:
 	out PORTC, r16
 	ldi r16, (1 << PD7) | (0 << PD6)
 	out PORTD, r16
-	; Check busy flag
+	; Get busy flag
 	in r16, PINB
+	mov r17, r16
+	; E = PD6 = 1
+	; RW = PD7 = 1
+	ldi r16, (1 << PD6) | (1 << PD7)
+	out PORTD, r16
+	nop
+	; RS = PC3 = 0
+	; RW = PD7 = 1
+	; E = PD6 = 0
+	ldi r16, (0 << PC3)
+	out PORTC, r16
+	ldi r16, (1 << PD7) | (0 << PD6)
+	out PORTD, r16
+	; destroy chert flag :D
+	in r16, PINB
+	; Restore busy flag
+	mov r16, r17
 	ori r16, $7F
 	cpi r16, $FF
 	breq lcd_write_busy
@@ -575,8 +629,24 @@ lcd_write_busy:
 	; PB0 - PB7 --> Output
 	ldi r16, $FF
 	out DDRB, r16
-	; Out r0
+	; Out HIGH(r0)
 	mov r16, r0
+	out PORTB, r16
+	; RS = PC3 = 1
+	; RW = PD7 = 0
+	; E = PD6 = 0
+	ldi r16, (1 << PC3)
+	out PORTC, r16
+	ldi r16, (0 << PD7) | (0 << PD6)
+	out PORTD, r16
+	; E = PD6 = 1
+	ldi r16, (1 << PD6)
+	out PORTD, r16
+	nop
+	nop
+	; Out LOW(r0)
+	mov r16, r0
+	swap r16
 	out PORTB, r16
 	; RS = PC3 = 1
 	; RW = PD7 = 0
