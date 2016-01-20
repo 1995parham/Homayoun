@@ -324,6 +324,15 @@ delay_loop_1:
 	brne delay_loop_3
 	ret
 
+min_delay:
+	ldi r16, $FF
+min_delay_loop:
+	wdr
+	dec r16
+	cpi r16, $00
+	brne min_delay_loop
+	ret
+
 ; Sned bytes stored in the buffer from
 ; begin to Y
 usart_send:
@@ -515,39 +524,7 @@ lcd_init_busy:
 
 ; Clear display
 lcd_clear:
-lcd_clear_busy:
-	; E = PD6 = 1
-	ldi r16, (1 << PD6)
-	out PORTD, r16
-	nop
-	; RS = PC3 = 0
-	; RW = PD7 = 1
-	; E = PD6 = 0
-	ldi r16, (0 << PC3)
-	out PORTC, r16
-	ldi r16, (1 << PD7) | (0 << PD6)
-	out PORTD, r16
-	; Get busy flag
-	in r16, PINB
-	mov r17, r16
-	; E = PD6 = 1
-	ldi r16, (1 << PD6)
-	out PORTD, r16
-	nop
-	; RS = PC3 = 0
-	; RW = PD7 = 1
-	; E = PD6 = 0
-	ldi r16, (0 << PC3)
-	out PORTC, r16
-	ldi r16, (1 << PD7) | (0 << PD6)
-	out PORTD, r16
-	; destroy chert flag :D
-	in r16, PINB
-	; Restore busy flag
-	mov r16, r17
-	ori r16, $7F
-	cpi r16, $FF
-	breq lcd_clear_busy
+	call min_delay
 	; E = PD6 = 1
 	ldi r16, (1 << PD6)
 	out PORTD, r16
@@ -589,40 +566,7 @@ lcd_clear_busy:
 
 ; Send one byte stored in r0 into LCD
 lcd_write:
-lcd_write_busy:
-	; E = PD6 = 1
-	ldi r16, (1 << PD6)
-	out PORTD, r16
-	nop
-	; RS = PC3 = 0
-	; RW = PD7 = 1
-	; E = PD6 = 0
-	ldi r16, (0 << PC3)
-	out PORTC, r16
-	ldi r16, (1 << PD7) | (0 << PD6)
-	out PORTD, r16
-	; Get busy flag
-	in r16, PINB
-	mov r17, r16
-	; E = PD6 = 1
-	; RW = PD7 = 1
-	ldi r16, (1 << PD6) | (1 << PD7)
-	out PORTD, r16
-	nop
-	; RS = PC3 = 0
-	; RW = PD7 = 1
-	; E = PD6 = 0
-	ldi r16, (0 << PC3)
-	out PORTC, r16
-	ldi r16, (1 << PD7) | (0 << PD6)
-	out PORTD, r16
-	; destroy chert flag :D
-	in r16, PINB
-	; Restore busy flag
-	mov r16, r17
-	ori r16, $7F
-	cpi r16, $FF
-	breq lcd_write_busy
+	call min_delay
 	; E = PD6 = 1
 	ldi r16, (1 << PD6)
 	out PORTD, r16
