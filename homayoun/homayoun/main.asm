@@ -52,16 +52,16 @@ reset_isr:
 	out PORTD, r16
 
 	; Set USART baud rate to 2400kbps with 16Mhz clock
-	ldi r16, $00
+	ldi r16, HIGH(416)
 	out UBRRH, r16
-	ldi r16, $5F
+	ldi r16, LOW(416)
 	out UBRRL,r16
 
 	; Set USART startup settings
-	; Stop bit = 1
-	; Parity = None
+	; Stop bit = 2
+	; Parity = ODD
 	; Data bit = 8
-	ldi r24, (0 << UMSEL) | (1 << UCSZ1) | (1 << URSEL) | (0 << UPM1) | (0 << UPM0) | (0 << UCPOL) | (1 << UCSZ0) | (0 << USBS)
+	ldi r24, (0 << UMSEL) | (1 << UCSZ1) | (1 << URSEL) | (1 << UPM1) | (1 << UPM0) | (0 << UCPOL) | (1 << UCSZ0) | (1 << USBS)
 	out UCSRC, r24
 	ldi r24, (0 << UCSZ2) | (1 << TXEN) | (0 << RXEN)
 	out UCSRB, r24
@@ -86,6 +86,7 @@ key_poll:
 	cpi r16, $FF
 	breq key_poll
 	
+	wdr
 	call key_find
 
 	; Show in seven segment
@@ -94,10 +95,6 @@ key_poll:
 	;call seven_seg
 	;out PORTB, r22
 
-	mov XL, r0
-	adiw X, $30
-	mov r0, XL
-	
 	; Show in LCD
 	call lcd_write
 
@@ -107,7 +104,7 @@ key_poll:
 	st Y+, r0
 
 	mov r21, r0
-	cpi r21, $3F
+	cpi r21, '\n'
 	brne key_poll_ret
 	call usart_send
 	call lcd_clear
@@ -124,23 +121,23 @@ start:
 ; put serven seg value in r22
 seven_seg:
 	mov r21, r0
-	cpi r21, 1
+	cpi r21, $31
 	breq seven_seg_1
-	cpi r21, 2
+	cpi r21, $32
 	breq seven_seg_2
-	cpi r21, 3
+	cpi r21, $33
 	breq seven_seg_3
-	cpi r21, 4
+	cpi r21, $34
 	breq seven_seg_4
-	cpi r21, 5
+	cpi r21, $35
 	breq seven_seg_5
-	cpi r21, 6
+	cpi r21, $36
 	breq seven_seg_6
-	cpi r21, 7
+	cpi r21, $37
 	breq seven_seg_7
-	cpi r21, 8
+	cpi r21, $38
 	breq seven_seg_8
-	cpi r21, 9
+	cpi r21, $39
 	breq seven_seg_9
 seven_seg_1:
 	ldi r22, $06
@@ -202,113 +199,113 @@ key_find_ret:
 	add r0, r18
 	dec r0
 	mov r16, r0
-	cpi r16, 0
+	cpi r16, $00
 	breq key_find_0
-	cpi r16, 1
+	cpi r16, $01
 	breq key_find_1
-	cpi r16, 2
+	cpi r16, $02
 	breq key_find_2
-	cpi r16, 3
+	cpi r16, $03
 	breq key_find_3
-	cpi r16, 4
+	cpi r16, $04
 	breq key_find_4
-	cpi r16, 5
+	cpi r16, $05
 	breq key_find_5
-	cpi r16, 6
+	cpi r16, $06
 	breq key_find_6	
-	cpi r16, 7
+	cpi r16, $07
 	breq key_find_7
-	cpi r16, 8
+	cpi r16, $08
 	breq key_find_8
-	cpi r16, 9
+	cpi r16, $09
 	breq key_find_9
-	cpi r16, 10
+	cpi r16, $0A
 	breq key_find_10
-	cpi r16, 11
+	cpi r16, $0B
 	breq key_find_11
-	cpi r16, 12
+	cpi r16, $0C
 	breq key_find_12
-	cpi r16, 13
+	cpi r16, $0D
 	breq key_find_13
-	cpi r16, 14
+	cpi r16, $0E
 	breq key_find_14
-	cpi r16, 15
+	cpi r16, $0F
 	breq key_find_15
 key_find_0:
 	; ENTER
-	ldi r16, $0F
+	ldi r16, '\n'
 	mov r0, r16
 	ret
 key_find_1:
 	; SET
-	ldi r16, $0E
+	ldi r16, 'S'
 	mov r0, r16
 	ret
 key_find_2:
-	ldi r16, $00
+	ldi r16, '0'
 	mov r0, r16
 	ret
 key_find_3:
 	; MENU
-	ldi r16, $0D
+	ldi r16, 'M'
 	mov r0, r16
 	ret
 key_find_4:
 	; MODE
-	ldi r16, $0C
+	ldi r16, 'm'
 	mov r0, r16
 	ret
 key_find_5:
-	ldi r16, $09
+	ldi r16, '9'
 	mov r0, r16
 	ret
 key_find_6:
-	ldi r16, $08
+	ldi r16, '8'
 	mov r0, r16
 	ret
 key_find_7:
-	ldi r16, $07
+	ldi r16, '7'
 	mov r0, r16
 	ret
 key_find_8:
 	; DOWN
-	ldi r16, $0B
+	ldi r16, 'D'
 	mov r0, r16
 	ret
 key_find_9:
-	ldi r16, $06
+	ldi r16, '6'
 	mov r0, r16
 	ret
 key_find_10:
-	ldi r16, $05
+	ldi r16, '5'
 	mov r0, r16
 	ret
 key_find_11:
-	ldi r16, $04
+	ldi r16, '4'
 	mov r0, r16
 	ret
 key_find_12:
 	; UP
-	ldi r16, $0A 
+	ldi r16, 'U' 
 	mov r0, r16
 	ret
 key_find_13:
-	ldi r16, $03
+	ldi r16, '3'
 	mov r0, r16
 	ret
 key_find_14:
-	ldi r16, $02
+	ldi r16, '2'
 	mov r0, r16
 	ret
 key_find_15:
-	ldi r16, $01
+	ldi r16, '1'
 	mov r0, r16
 	ret
 	
 
 ; Create delay with repeating nop
 delay:
-	ldi r18, $10
+	ldi r18, $0A
 delay_loop_3:
 	ldi r17, $FF
 delay_loop_2:
@@ -335,8 +332,11 @@ usart_send_try:
 	wdr
     sbis UCSRA, UDRE
 	rjmp usart_send_try
-	ld r16, Z+
+	wdr
+	ld r16, Z
 	out UDR, r16
+	ldi r16, $FF
+	st Z+, r16
 	cp ZH, YH
 	brne usart_send_try
 	cp ZL, YL
