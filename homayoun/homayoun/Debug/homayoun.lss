@@ -1,5 +1,5 @@
 
-AVRASM ver. 2.1.57  C:\Users\Parham Alvani\Documents\GitHub\Homayoun\homayoun\homayoun\main.asm Wed Jan 20 04:51:24 2016
+AVRASM ver. 2.1.57  Z:\Documents\Git\parham\homayoun\homayoun\homayoun\main.asm Wed Jan 20 08:34:30 2016
 
 [builtin](2): Including file 'C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.0.90\avrasm\inc\m16def.inc'
                  
@@ -921,10 +921,10 @@ AVRASM ver. 2.1.57  C:\Users\Parham Alvani\Documents\GitHub\Homayoun\homayoun\ho
 000014 e400      	ldi r16, (1 << PD6)
 000015 bb02      	out PORTD, r16
                  
-                 	; Set USART baud rate to 2400kbps with 16Mhz clock
-000016 e001      	ldi r16, HIGH(416)
+                 	; Set USART baud rate to 2400kbps with 1Mhz clock
+000016 e000      	ldi r16, HIGH(25)
 000017 bd00      	out UBRRH, r16
-000018 ea00      	ldi r16, LOW(416)
+000018 e109      	ldi r16, LOW(25)
 000019 b909      	out UBRRL,r16
                  
                  	; Set USART startup settings
@@ -1175,9 +1175,9 @@ AVRASM ver. 2.1.57  C:\Users\Parham Alvani\Documents\GitHub\Homayoun\homayoun\ho
                  
                  ; Create delay with repeating nop
                  delay:
-0000d2 e02a      	ldi r18, $0A
+0000d2 e021      	ldi r18, $01
                  delay_loop_3:
-0000d3 ef1f      	ldi r17, $FF
+0000d3 ee10      	ldi r17, $E0
                  delay_loop_2:
 0000d4 ef0f      	ldi r16, $FF
                  delay_loop_1:

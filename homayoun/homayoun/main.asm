@@ -51,10 +51,10 @@ reset_isr:
 	ldi r16, (1 << PD6)
 	out PORTD, r16
 
-	; Set USART baud rate to 2400kbps with 16Mhz clock
-	ldi r16, HIGH(416)
+	; Set USART baud rate to 2400kbps with 1Mhz clock
+	ldi r16, HIGH(25)
 	out UBRRH, r16
-	ldi r16, LOW(416)
+	ldi r16, LOW(25)
 	out UBRRL,r16
 
 	; Set USART startup settings
@@ -305,9 +305,9 @@ key_find_15:
 
 ; Create delay with repeating nop
 delay:
-	ldi r18, $0A
+	ldi r18, $01
 delay_loop_3:
-	ldi r17, $FF
+	ldi r17, $E0
 delay_loop_2:
 	ldi r16, $FF
 delay_loop_1:
