@@ -1,5 +1,5 @@
 
-AVRASM ver. 2.1.57  Z:\Documents\Git\parham\homayoun\homayoun\homayoun\main.asm Wed Jan 20 08:34:30 2016
+AVRASM ver. 2.1.57  Z:\Documents\Git\parham\homayoun\homayoun\homayoun\main.asm Wed Jan 20 09:36:51 2016
 
 [builtin](2): Including file 'C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.0.90\avrasm\inc\m16def.inc'
                  
@@ -942,22 +942,23 @@ AVRASM ver. 2.1.57  Z:\Documents\Git\parham\homayoun\homayoun\homayoun\main.asm 
 000020 e00f      	ldi r16, $0F
 000021 bb04      	out DDRC, r16
                  	
-000022 940e 00f1 	call lcd_init
-000024 9478      	sei
-000025 940c 003e 	jmp start
+000022 940e 00f3 	call lcd_function_set
+000024 940e 0127 	call lcd_init
+000026 9478      	sei
+000027 940c 0040 	jmp start
                  
                  ; Keypad interrupt rutine, providing delay
                  ; to keep key bauncing away :)
                  key_poll:
-000027 95a8      	wdr
-000028 940e 00d2 	call delay
-00002a b309      	in r16, PINA
-00002b 6f00      	ori r16, $F0
-00002c 3f0f      	cpi r16, $FF
-00002d f3c9      	breq key_poll
+000029 95a8      	wdr
+00002a 940e 00d4 	call delay
+00002c b309      	in r16, PINA
+00002d 6f00      	ori r16, $F0
+00002e 3f0f      	cpi r16, $FF
+00002f f3c9      	breq key_poll
                  	
-00002e 95a8      	wdr
-00002f 940e 0068 	call key_find
+000030 95a8      	wdr
+000031 940e 006a 	call key_find
                  
                  	; Show in seven segment
                  	;ldi r16, $0E
@@ -966,385 +967,501 @@ AVRASM ver. 2.1.57  Z:\Documents\Git\parham\homayoun\homayoun\homayoun\main.asm 
                  	;out PORTB, r22
                  
                  	; Show in LCD
-000031 940e 0125 	call lcd_write
+000033 940e 016e 	call lcd_write
                  
-000033 e00f      	ldi r16, $0F
-000034 bb0b      	out PORTA, r16
+000035 e00f      	ldi r16, $0F
+000036 bb0b      	out PORTA, r16
                  	
-000035 9209      	st Y+, r0
+000037 9209      	st Y+, r0
                  
-000036 2d50      	mov r21, r0
-000037 305a      	cpi r21, '\n'
-000038 f421      	brne key_poll_ret
-000039 940e 00e0 	call usart_send
-00003b 940e 010b 	call lcd_clear
+000038 2d50      	mov r21, r0
+000039 305a      	cpi r21, '\n'
+00003a f421      	brne key_poll_ret
+00003b 940e 00e2 	call usart_send
+00003d 940e 0154 	call lcd_clear
                  
                  key_poll_ret:
-00003d 9508      	ret
+00003f 9508      	ret
                  
                  start:
-00003e 95a8      	wdr
-00003f 940e 0027     call key_poll
-000041 940c 003e     jmp start
+000040 95a8      	wdr
+000041 940e 0029     call key_poll
+000043 940c 0040     jmp start
                  
                  ; Get value in r0 and
                  ; put serven seg value in r22
                  seven_seg:
-000043 2d50      	mov r21, r0
-000044 3351      	cpi r21, $31
-000045 f081      	breq seven_seg_1
-000046 3352      	cpi r21, $32
-000047 f081      	breq seven_seg_2
-000048 3353      	cpi r21, $33
-000049 f081      	breq seven_seg_3
-00004a 3354      	cpi r21, $34
-00004b f081      	breq seven_seg_4
-00004c 3355      	cpi r21, $35
-00004d f081      	breq seven_seg_5
-00004e 3356      	cpi r21, $36
-00004f f081      	breq seven_seg_6
-000050 3357      	cpi r21, $37
-000051 f081      	breq seven_seg_7
-000052 3358      	cpi r21, $38
-000053 f081      	breq seven_seg_8
-000054 3359      	cpi r21, $39
-000055 f081      	breq seven_seg_9
+000045 2d50      	mov r21, r0
+000046 3351      	cpi r21, $31
+000047 f081      	breq seven_seg_1
+000048 3352      	cpi r21, $32
+000049 f081      	breq seven_seg_2
+00004a 3353      	cpi r21, $33
+00004b f081      	breq seven_seg_3
+00004c 3354      	cpi r21, $34
+00004d f081      	breq seven_seg_4
+00004e 3355      	cpi r21, $35
+00004f f081      	breq seven_seg_5
+000050 3356      	cpi r21, $36
+000051 f081      	breq seven_seg_6
+000052 3357      	cpi r21, $37
+000053 f081      	breq seven_seg_7
+000054 3358      	cpi r21, $38
+000055 f081      	breq seven_seg_8
+000056 3359      	cpi r21, $39
+000057 f081      	breq seven_seg_9
                  seven_seg_1:
-000056 e066      	ldi r22, $06
-000057 9508      	ret
-                 seven_seg_2:
-000058 e56b      	ldi r22, $5B
+000058 e066      	ldi r22, $06
 000059 9508      	ret
-                 seven_seg_3:
-00005a e46f      	ldi r22, $4F
+                 seven_seg_2:
+00005a e56b      	ldi r22, $5B
 00005b 9508      	ret
-                 seven_seg_4:
-00005c e666      	ldi r22, $66
+                 seven_seg_3:
+00005c e46f      	ldi r22, $4F
 00005d 9508      	ret
-                 seven_seg_5:
-00005e e66d      	ldi r22, $6D
+                 seven_seg_4:
+00005e e666      	ldi r22, $66
 00005f 9508      	ret
-                 seven_seg_6:
-000060 e76d      	ldi r22, $7D
+                 seven_seg_5:
+000060 e66d      	ldi r22, $6D
 000061 9508      	ret
-                 seven_seg_7:
-000062 e067      	ldi r22, $07
+                 seven_seg_6:
+000062 e76d      	ldi r22, $7D
 000063 9508      	ret
-                 seven_seg_8:
-000064 e76f      	ldi r22, $7F
+                 seven_seg_7:
+000064 e067      	ldi r22, $07
 000065 9508      	ret
-                 seven_seg_9:
-000066 e66f      	ldi r22, $6F
+                 seven_seg_8:
+000066 e76f      	ldi r22, $7F
 000067 9508      	ret
+                 seven_seg_9:
+000068 e66f      	ldi r22, $6F
+000069 9508      	ret
                  
                  ; Find key pressed on row keypad
                  ; and put in r0;
                  key_find:
-000068 e010      	ldi r17, $00
-000069 e020      	ldi r18, $00
-00006a e73f      	ldi r19, $7F
+00006a e010      	ldi r17, $00
+00006b e020      	ldi r18, $00
+00006c e73f      	ldi r19, $7F
                  key_find_loop1:
-00006b 2f03      	mov r16, r19
-00006c bb0b      	out PORTA, r16
-00006d 0000      	nop
-00006e b309      	in r16, PINA
-00006f e044      	ldi r20, $04
+00006d 2f03      	mov r16, r19
+00006e bb0b      	out PORTA, r16
+00006f 0000      	nop
+000070 b309      	in r16, PINA
+000071 e044      	ldi r20, $04
                  key_find_loop2:
-000070 9507      	ror r16
-000071 f460      	brcc key_find_ret
-000072 954a      	dec r20
-000073 3040      	cpi r20, $00
-000074 f7d9      	brne key_find_loop2
-000075 9523      	inc r18
-000076 9523      	inc r18
+000072 9507      	ror r16
+000073 f460      	brcc key_find_ret
+000074 954a      	dec r20
+000075 3040      	cpi r20, $00
+000076 f7d9      	brne key_find_loop2
 000077 9523      	inc r18
 000078 9523      	inc r18
-000079 9408      	sec
-00007a 9537      	ror r19
-00007b 9513      	inc r17
-00007c 3014      	cpi r17, $04
-00007d f769      	brne key_find_loop1
+000079 9523      	inc r18
+00007a 9523      	inc r18
+00007b 9408      	sec
+00007c 9537      	ror r19
+00007d 9513      	inc r17
+00007e 3014      	cpi r17, $04
+00007f f769      	brne key_find_loop1
                  key_find_ret:
-00007e 2e04      	mov r0, r20
-00007f 0e02      	add r0, r18
-000080 940a      	dec r0
-000081 2d00      	mov r16, r0
-000082 3000      	cpi r16, $00
-000083 f0f1      	breq key_find_0
-000084 3001      	cpi r16, $01
-000085 f0f9      	breq key_find_1
-000086 3002      	cpi r16, $02
-000087 f101      	breq key_find_2
-000088 3003      	cpi r16, $03
-000089 f109      	breq key_find_3
-00008a 3004      	cpi r16, $04
-00008b f111      	breq key_find_4
-00008c 3005      	cpi r16, $05
-00008d f119      	breq key_find_5
-00008e 3006      	cpi r16, $06
-00008f f121      	breq key_find_6	
-000090 3007      	cpi r16, $07
-000091 f129      	breq key_find_7
-000092 3008      	cpi r16, $08
-000093 f131      	breq key_find_8
-000094 3009      	cpi r16, $09
-000095 f139      	breq key_find_9
-000096 300a      	cpi r16, $0A
-000097 f141      	breq key_find_10
-000098 300b      	cpi r16, $0B
-000099 f149      	breq key_find_11
-00009a 300c      	cpi r16, $0C
-00009b f151      	breq key_find_12
-00009c 300d      	cpi r16, $0D
-00009d f159      	breq key_find_13
-00009e 300e      	cpi r16, $0E
-00009f f161      	breq key_find_14
-0000a0 300f      	cpi r16, $0F
-0000a1 f169      	breq key_find_15
+000080 2e04      	mov r0, r20
+000081 0e02      	add r0, r18
+000082 940a      	dec r0
+000083 2d00      	mov r16, r0
+000084 3000      	cpi r16, $00
+000085 f0f1      	breq key_find_0
+000086 3001      	cpi r16, $01
+000087 f0f9      	breq key_find_1
+000088 3002      	cpi r16, $02
+000089 f101      	breq key_find_2
+00008a 3003      	cpi r16, $03
+00008b f109      	breq key_find_3
+00008c 3004      	cpi r16, $04
+00008d f111      	breq key_find_4
+00008e 3005      	cpi r16, $05
+00008f f119      	breq key_find_5
+000090 3006      	cpi r16, $06
+000091 f121      	breq key_find_6	
+000092 3007      	cpi r16, $07
+000093 f129      	breq key_find_7
+000094 3008      	cpi r16, $08
+000095 f131      	breq key_find_8
+000096 3009      	cpi r16, $09
+000097 f139      	breq key_find_9
+000098 300a      	cpi r16, $0A
+000099 f141      	breq key_find_10
+00009a 300b      	cpi r16, $0B
+00009b f149      	breq key_find_11
+00009c 300c      	cpi r16, $0C
+00009d f151      	breq key_find_12
+00009e 300d      	cpi r16, $0D
+00009f f159      	breq key_find_13
+0000a0 300e      	cpi r16, $0E
+0000a1 f161      	breq key_find_14
+0000a2 300f      	cpi r16, $0F
+0000a3 f169      	breq key_find_15
                  key_find_0:
                  	; ENTER
-0000a2 e00a      	ldi r16, '\n'
-0000a3 2e00      	mov r0, r16
-0000a4 9508      	ret
+0000a4 e00a      	ldi r16, '\n'
+0000a5 2e00      	mov r0, r16
+0000a6 9508      	ret
                  key_find_1:
                  	; SET
-0000a5 e503      	ldi r16, 'S'
-0000a6 2e00      	mov r0, r16
-0000a7 9508      	ret
+0000a7 e503      	ldi r16, 'S'
+0000a8 2e00      	mov r0, r16
+0000a9 9508      	ret
                  key_find_2:
-0000a8 e300      	ldi r16, '0'
-0000a9 2e00      	mov r0, r16
-0000aa 9508      	ret
+0000aa e300      	ldi r16, '0'
+0000ab 2e00      	mov r0, r16
+0000ac 9508      	ret
                  key_find_3:
                  	; MENU
-0000ab e40d      	ldi r16, 'M'
-0000ac 2e00      	mov r0, r16
-0000ad 9508      	ret
+0000ad e40d      	ldi r16, 'M'
+0000ae 2e00      	mov r0, r16
+0000af 9508      	ret
                  key_find_4:
                  	; MODE
-0000ae e60d      	ldi r16, 'm'
-0000af 2e00      	mov r0, r16
-0000b0 9508      	ret
+0000b0 e60d      	ldi r16, 'm'
+0000b1 2e00      	mov r0, r16
+0000b2 9508      	ret
                  key_find_5:
-0000b1 e309      	ldi r16, '9'
-0000b2 2e00      	mov r0, r16
-0000b3 9508      	ret
+0000b3 e309      	ldi r16, '9'
+0000b4 2e00      	mov r0, r16
+0000b5 9508      	ret
                  key_find_6:
-0000b4 e308      	ldi r16, '8'
-0000b5 2e00      	mov r0, r16
-0000b6 9508      	ret
+0000b6 e308      	ldi r16, '8'
+0000b7 2e00      	mov r0, r16
+0000b8 9508      	ret
                  key_find_7:
-0000b7 e307      	ldi r16, '7'
-0000b8 2e00      	mov r0, r16
-0000b9 9508      	ret
+0000b9 e307      	ldi r16, '7'
+0000ba 2e00      	mov r0, r16
+0000bb 9508      	ret
                  key_find_8:
                  	; DOWN
-0000ba e404      	ldi r16, 'D'
-0000bb 2e00      	mov r0, r16
-0000bc 9508      	ret
+0000bc e404      	ldi r16, 'D'
+0000bd 2e00      	mov r0, r16
+0000be 9508      	ret
                  key_find_9:
-0000bd e306      	ldi r16, '6'
-0000be 2e00      	mov r0, r16
-0000bf 9508      	ret
+0000bf e306      	ldi r16, '6'
+0000c0 2e00      	mov r0, r16
+0000c1 9508      	ret
                  key_find_10:
-0000c0 e305      	ldi r16, '5'
-0000c1 2e00      	mov r0, r16
-0000c2 9508      	ret
+0000c2 e305      	ldi r16, '5'
+0000c3 2e00      	mov r0, r16
+0000c4 9508      	ret
                  key_find_11:
-0000c3 e304      	ldi r16, '4'
-0000c4 2e00      	mov r0, r16
-0000c5 9508      	ret
+0000c5 e304      	ldi r16, '4'
+0000c6 2e00      	mov r0, r16
+0000c7 9508      	ret
                  key_find_12:
                  	; UP
-0000c6 e505      	ldi r16, 'U' 
-0000c7 2e00      	mov r0, r16
-0000c8 9508      	ret
+0000c8 e505      	ldi r16, 'U' 
+0000c9 2e00      	mov r0, r16
+0000ca 9508      	ret
                  key_find_13:
-0000c9 e303      	ldi r16, '3'
-0000ca 2e00      	mov r0, r16
-0000cb 9508      	ret
+0000cb e303      	ldi r16, '3'
+0000cc 2e00      	mov r0, r16
+0000cd 9508      	ret
                  key_find_14:
-0000cc e302      	ldi r16, '2'
-0000cd 2e00      	mov r0, r16
-0000ce 9508      	ret
+0000ce e302      	ldi r16, '2'
+0000cf 2e00      	mov r0, r16
+0000d0 9508      	ret
                  key_find_15:
-0000cf e301      	ldi r16, '1'
-0000d0 2e00      	mov r0, r16
-0000d1 9508      	ret
+0000d1 e301      	ldi r16, '1'
+0000d2 2e00      	mov r0, r16
+0000d3 9508      	ret
                  	
                  
                  ; Create delay with repeating nop
                  delay:
-0000d2 e021      	ldi r18, $01
+0000d4 e021      	ldi r18, $01
                  delay_loop_3:
-0000d3 ee10      	ldi r17, $E0
+0000d5 ee10      	ldi r17, $E0
                  delay_loop_2:
-0000d4 ef0f      	ldi r16, $FF
+0000d6 ef0f      	ldi r16, $FF
                  delay_loop_1:
-0000d5 95a8      	wdr
-0000d6 950a      	dec r16
-0000d7 3000      	cpi r16, $00
-0000d8 f7e1      	brne delay_loop_1
-0000d9 951a      	dec r17
-0000da 3010      	cpi r17, $00
-0000db f7c1      	brne delay_loop_2
-0000dc 952a      	dec r18
-0000dd 3020      	cpi r18, $00
-0000de f7a1      	brne delay_loop_3
-0000df 9508      	ret
+0000d7 95a8      	wdr
+0000d8 950a      	dec r16
+0000d9 3000      	cpi r16, $00
+0000da f7e1      	brne delay_loop_1
+0000db 951a      	dec r17
+0000dc 3010      	cpi r17, $00
+0000dd f7c1      	brne delay_loop_2
+0000de 952a      	dec r18
+0000df 3020      	cpi r18, $00
+0000e0 f7a1      	brne delay_loop_3
+0000e1 9508      	ret
                  
                  ; Sned bytes stored in the buffer from
                  ; begin to Y
                  usart_send:
-0000e0 e6e0      	ldi ZL, LOW(buffer)
-0000e1 e0f0      	ldi ZH, HIGH(buffer)
+0000e2 e6e0      	ldi ZL, LOW(buffer)
+0000e3 e0f0      	ldi ZH, HIGH(buffer)
                  usart_send_try:
-0000e2 95a8      	wdr
-0000e3 9b5d          sbis UCSRA, UDRE
-0000e4 cffd      	rjmp usart_send_try
-0000e5 95a8      	wdr
-0000e6 8100      	ld r16, Z
-0000e7 b90c      	out UDR, r16
-0000e8 ef0f      	ldi r16, $FF
-0000e9 9301      	st Z+, r16
-0000ea 17fd      	cp ZH, YH
-0000eb f7b1      	brne usart_send_try
-0000ec 17ec      	cp ZL, YL
-0000ed f7a1      	brne usart_send_try
-0000ee e6c0      	ldi YL, LOW(buffer)
-0000ef e0d0      	ldi YH, HIGH(buffer)
-0000f0 9508      	ret
+0000e4 95a8      	wdr
+0000e5 9b5d          sbis UCSRA, UDRE
+0000e6 cffd      	rjmp usart_send_try
+0000e7 95a8      	wdr
+0000e8 8100      	ld r16, Z
+0000e9 b90c      	out UDR, r16
+0000ea ef0f      	ldi r16, $FF
+0000eb 9301      	st Z+, r16
+0000ec 17fd      	cp ZH, YH
+0000ed f7b1      	brne usart_send_try
+0000ee 17ec      	cp ZL, YL
+0000ef f7a1      	brne usart_send_try
+0000f0 e6c0      	ldi YL, LOW(buffer)
+0000f1 e0d0      	ldi YH, HIGH(buffer)
+0000f2 9508      	ret
                  
+                 ; Function set of led
+                 lcd_function_set:
+                 	; E = PD6 = 1
+0000f3 e400      	ldi r16, (1 << PD6)
+0000f4 bb02      	out PORTD, r16
+                 	; PB0 - PB7 --> Output
+0000f5 ef0f      	ldi r16, $FF
+0000f6 bb07      	out DDRB, r16
+                 	; Out HIGH($20)
+0000f7 e200      	ldi r16, $20
+0000f8 bb08      	out PORTB, r16
+                 	; RS = PC3 = 0
+                 	; RW = PD7 = 0
+                 	; E = PD6 = 0
+0000f9 e000      	ldi r16, (0 << PC3)
+0000fa bb05      	out PORTC, r16
+0000fb e000      	ldi r16, (0 << PD7) | (0 << PD6)
+0000fc bb02      	out PORTD, r16
+                 lcd_function_set_busy:
+                 	; E = PD6 = 1
+0000fd e400      	ldi r16, (1 << PD6)
+0000fe bb02      	out PORTD, r16
+0000ff 0000      	nop
+                 	; RS = PC3 = 0
+                 	; RW = PD7 = 1
+                 	; E = PD6 = 0
+000100 e000      	ldi r16, (0 << PC3)
+000101 bb05      	out PORTC, r16
+000102 e800      	ldi r16, (1 << PD7) | (0 << PD6)
+000103 bb02      	out PORTD, r16
+                 	; Get busy flag
+000104 b306      	in r16, PINB
+000105 2f10      	mov r17, r16
+                 	; E = PD6 = 1
+000106 e400      	ldi r16, (1 << PD6)
+000107 bb02      	out PORTD, r16
+000108 0000      	nop
+                 	; RS = PC3 = 0
+                 	; RW = PD7 = 1
+                 	; E = PD6 = 0
+000109 e000      	ldi r16, (0 << PC3)
+00010a bb05      	out PORTC, r16
+00010b e800      	ldi r16, (1 << PD7) | (0 << PD6)
+00010c bb02      	out PORTD, r16
+                 	; destroy chert flag :D
+00010d b306      	in r16, PINB
+                 	; Restore busy flag
+00010e 2f01      	mov r16, r17
+00010f 670f      	ori r16, $7F
+000110 3f0f      	cpi r16, $FF
+000111 f0a9      	breq lcd_init_busy
+                 	; E = PD6 = 1
+000112 e400      	ldi r16, (1 << PD6)
+000113 bb02      	out PORTD, r16
+                 	; Out HIGH($20)
+000114 e200      	ldi r16, $20
+000115 bb08      	out PORTB, r16
+                 	; RS = PC3 = 0
+                 	; RW = PD7 = 0
+                 	; E = PD6 = 0
+000116 e000      	ldi r16, (0 << PC3)
+000117 bb05      	out PORTC, r16
+000118 e000      	ldi r16, (0 << PD7) | (0 << PD6)
+000119 bb02      	out PORTD, r16
+                 	; E = PD6 = 1
+00011a e400      	ldi r16, (1 << PD6)
+00011b bb02      	out PORTD, r16
+                 	; Out LOW($20)
+00011c e000      	ldi r16, $00
+00011d bb08      	out PORTB, r16
+                 	; RS = PC3 = 0
+                 	; RW = PD7 = 0
+                 	; E = PD6 = 0
+00011e e000      	ldi r16, (0 << PC3)
+00011f bb05      	out PORTC, r16
+000120 e000      	ldi r16, (0 << PD7) | (0 << PD6)
+000121 bb02      	out PORTD, r16
+                 	; E = PD6 = 1
+000122 e400      	ldi r16, (1 << PD6)
+000123 bb02      	out PORTD, r16
+                 	; PB0 - PB6 --> output
+                 	; PB7 --> Input
+000124 e70f      	ldi r16, $7F
+000125 bb07      	out DDRB, r16
+000126 9508      	ret
+                 	
                  ; Set dispaly, cursor on .. let's rock :)
                  lcd_init:
                  lcd_init_busy:
                  	; E = PD6 = 1
-0000f1 e400      	ldi r16, (1 << PD6)
-0000f2 bb02      	out PORTD, r16
-0000f3 0000      	nop
+000127 e400      	ldi r16, (1 << PD6)
+000128 bb02      	out PORTD, r16
+000129 0000      	nop
                  	; RS = PC3 = 0
                  	; RW = PD7 = 1
                  	; E = PD6 = 0
-0000f4 e000      	ldi r16, (0 << PC3)
-0000f5 bb05      	out PORTC, r16
-0000f6 e800      	ldi r16, (1 << PD7) | (0 << PD6)
-0000f7 bb02      	out PORTD, r16
-                 	; Check busy flag
-0000f8 b306      	in r16, PINB
-0000f9 670f      	ori r16, $7F
-0000fa 3f0f      	cpi r16, $FF
-0000fb f3a9      	breq lcd_init_busy
+00012a e000      	ldi r16, (0 << PC3)
+00012b bb05      	out PORTC, r16
+00012c e800      	ldi r16, (1 << PD7) | (0 << PD6)
+00012d bb02      	out PORTD, r16
+                 	; Get busy flag
+00012e b306      	in r16, PINB
+00012f 2f10      	mov r17, r16
                  	; E = PD6 = 1
-0000fc e400      	ldi r16, (1 << PD6)
-0000fd bb02      	out PORTD, r16
+000130 e400      	ldi r16, (1 << PD6)
+000131 bb02      	out PORTD, r16
+000132 0000      	nop
+                 	; RS = PC3 = 0
+                 	; RW = PD7 = 1
+                 	; E = PD6 = 0
+000133 e000      	ldi r16, (0 << PC3)
+000134 bb05      	out PORTC, r16
+000135 e800      	ldi r16, (1 << PD7) | (0 << PD6)
+000136 bb02      	out PORTD, r16
+                 	; destroy chert flag :D
+000137 b306      	in r16, PINB
+                 	; Restore busy flag
+000138 2f01      	mov r16, r17
+000139 670f      	ori r16, $7F
+00013a 3f0f      	cpi r16, $FF
+00013b f359      	breq lcd_init_busy
+                 	; E = PD6 = 1
+00013c e400      	ldi r16, (1 << PD6)
+00013d bb02      	out PORTD, r16
                  	; PB0 - PB7 --> Output
-0000fe ef0f      	ldi r16, $FF
-0000ff bb07      	out DDRB, r16
-                 	; Out 0x0F
-000100 e00f      	ldi r16, $0F
-000101 bb08      	out PORTB, r16
+00013e ef0f      	ldi r16, $FF
+00013f bb07      	out DDRB, r16
+                 	; Out HIGH(0x0F)
+000140 e000      	ldi r16, $00
+000141 bb08      	out PORTB, r16
                  	; RS = PC3 = 0
                  	; RW = PD7 = 0
                  	; E = PD6 = 0
-000102 e000      	ldi r16, (0 << PC3)
-000103 bb05      	out PORTC, r16
-000104 e000      	ldi r16, (0 << PD7) | (0 << PD6)
-000105 bb02      	out PORTD, r16
+000142 e000      	ldi r16, (0 << PC3)
+000143 bb05      	out PORTC, r16
+000144 e000      	ldi r16, (0 << PD7) | (0 << PD6)
+000145 bb02      	out PORTD, r16
                  	; E = PD6 = 1
-000106 e400      	ldi r16, (1 << PD6)
-000107 bb02      	out PORTD, r16
+000146 e400      	ldi r16, (1 << PD6)
+000147 bb02      	out PORTD, r16
+000148 0000      	nop
+                 	; Out LOW(0x0F)
+000149 ef00      	ldi r16, $F0
+00014a bb08      	out PORTB, r16
+                 	; RS = PC3 = 0
+                 	; RW = PD7 = 0
+                 	; E = PD6 = 0
+00014b e000      	ldi r16, (0 << PC3)
+00014c bb05      	out PORTC, r16
+00014d e000      	ldi r16, (0 << PD7) | (0 << PD6)
+00014e bb02      	out PORTD, r16
+                 	; E = PD6 = 1
+00014f e400      	ldi r16, (1 << PD6)
+000150 bb02      	out PORTD, r16
                  	; PB0 - PB6 --> output
                  	; PB7 --> Input
-000108 e70f      	ldi r16, $7F
-000109 bb07      	out DDRB, r16
-00010a 9508      	ret
+000151 e70f      	ldi r16, $7F
+000152 bb07      	out DDRB, r16
+000153 9508      	ret
                  
                  ; Clear display
                  lcd_clear:
                  lcd_clear_busy:
                  	; E = PD6 = 1
-00010b e400      	ldi r16, (1 << PD6)
-00010c bb02      	out PORTD, r16
-00010d 0000      	nop
+000154 e400      	ldi r16, (1 << PD6)
+000155 bb02      	out PORTD, r16
+000156 0000      	nop
                  	; RS = PC3 = 0
                  	; RW = PD7 = 1
                  	; E = PD6 = 0
-00010e e000      	ldi r16, (0 << PC3)
-00010f bb05      	out PORTC, r16
-000110 e800      	ldi r16, (1 << PD7) | (0 << PD6)
-000111 bb02      	out PORTD, r16
+000157 e000      	ldi r16, (0 << PC3)
+000158 bb05      	out PORTC, r16
+000159 e800      	ldi r16, (1 << PD7) | (0 << PD6)
+00015a bb02      	out PORTD, r16
                  	; Check busy flag
-000112 b306      	in r16, PINB
-000113 670f      	ori r16, $7F
-000114 3f0f      	cpi r16, $FF
-000115 f3a9      	breq lcd_clear_busy
+00015b b306      	in r16, PINB
+00015c 670f      	ori r16, $7F
+00015d 3f0f      	cpi r16, $FF
+00015e f3a9      	breq lcd_clear_busy
                  	; E = PD6 = 1
-000116 e400      	ldi r16, (1 << PD6)
-000117 bb02      	out PORTD, r16
+00015f e400      	ldi r16, (1 << PD6)
+000160 bb02      	out PORTD, r16
                  	; PB0 - PB7 --> Output
-000118 ef0f      	ldi r16, $FF
-000119 bb07      	out DDRB, r16
+000161 ef0f      	ldi r16, $FF
+000162 bb07      	out DDRB, r16
                  	; Out 0x01
-00011a e001      	ldi r16, $01
-00011b bb08      	out PORTB, r16
+000163 e001      	ldi r16, $01
+000164 bb08      	out PORTB, r16
                  	; RS = PC3 = 0
                  	; RW = PD7 = 0
                  	; E = PD6 = 0
-00011c e000      	ldi r16, (0 << PC3)
-00011d bb05      	out PORTC, r16
-00011e e000      	ldi r16, (0 << PD7) | (0 << PD6)
-00011f bb02      	out PORTD, r16
+000165 e000      	ldi r16, (0 << PC3)
+000166 bb05      	out PORTC, r16
+000167 e000      	ldi r16, (0 << PD7) | (0 << PD6)
+000168 bb02      	out PORTD, r16
                  	; E = PD6 = 1
-000120 e400      	ldi r16, (1 << PD6)
-000121 bb02      	out PORTD, r16
+000169 e400      	ldi r16, (1 << PD6)
+00016a bb02      	out PORTD, r16
                  	; PB0 - PB6 --> output
                  	; PB7 --> Input
-000122 e70f      	ldi r16, $7F
-000123 bb07      	out DDRB, r16
-000124 9508      	ret
+00016b e70f      	ldi r16, $7F
+00016c bb07      	out DDRB, r16
+00016d 9508      	ret
                  
                  ; Send one byte stored in r0 into LCD
                  lcd_write:
                  lcd_write_busy:
                  	; E = PD6 = 1
-000125 e400      	ldi r16, (1 << PD6)
-000126 bb02      	out PORTD, r16
-000127 0000      	nop
+00016e e400      	ldi r16, (1 << PD6)
+00016f bb02      	out PORTD, r16
+000170 0000      	nop
                  	; RS = PC3 = 0
                  	; RW = PD7 = 1
                  	; E = PD6 = 0
-000128 e000      	ldi r16, (0 << PC3)
-000129 bb05      	out PORTC, r16
-00012a e800      	ldi r16, (1 << PD7) | (0 << PD6)
-00012b bb02      	out PORTD, r16
+000171 e000      	ldi r16, (0 << PC3)
+000172 bb05      	out PORTC, r16
+000173 e800      	ldi r16, (1 << PD7) | (0 << PD6)
+000174 bb02      	out PORTD, r16
                  	; Check busy flag
-00012c b306      	in r16, PINB
-00012d 670f      	ori r16, $7F
-00012e 3f0f      	cpi r16, $FF
-00012f f3a9      	breq lcd_write_busy
+000175 b306      	in r16, PINB
+000176 670f      	ori r16, $7F
+000177 3f0f      	cpi r16, $FF
+000178 f3a9      	breq lcd_write_busy
                  	; E = PD6 = 1
-000130 e400      	ldi r16, (1 << PD6)
-000131 bb02      	out PORTD, r16
+000179 e400      	ldi r16, (1 << PD6)
+00017a bb02      	out PORTD, r16
                  	; PB0 - PB7 --> Output
-000132 ef0f      	ldi r16, $FF
-000133 bb07      	out DDRB, r16
+00017b ef0f      	ldi r16, $FF
+00017c bb07      	out DDRB, r16
                  	; Out r0
-000134 2d00      	mov r16, r0
-000135 bb08      	out PORTB, r16
+00017d 2d00      	mov r16, r0
+00017e bb08      	out PORTB, r16
                  	; RS = PC3 = 1
                  	; RW = PD7 = 0
                  	; E = PD6 = 0
-000136 e008      	ldi r16, (1 << PC3)
-000137 bb05      	out PORTC, r16
-000138 e000      	ldi r16, (0 << PD7) | (0 << PD6)
-000139 bb02      	out PORTD, r16
+00017f e008      	ldi r16, (1 << PC3)
+000180 bb05      	out PORTC, r16
+000181 e000      	ldi r16, (0 << PD7) | (0 << PD6)
+000182 bb02      	out PORTD, r16
                  	; E = PD6 = 1
-00013a e400      	ldi r16, (1 << PD6)
-00013b bb02      	out PORTD, r16
+000183 e400      	ldi r16, (1 << PD6)
+000184 bb02      	out PORTD, r16
                  	; PB0 - PB6 --> output
                  	; PB7 --> Input
-00013c e70f      	ldi r16, $7F
-00013d bb07      	out DDRB, r16
+000185 e70f      	ldi r16, $7F
+000186 bb07      	out DDRB, r16
 
 
 RESOURCE USE INFORMATION
@@ -1364,7 +1481,7 @@ counted separately from r26..r31 here.
 "ATmega16" register use summary:
 r0 :  24 r1 :   0 r2 :   0 r3 :   0 r4 :   0 r5 :   0 r6 :   0 r7 :   0 
 r8 :   0 r9 :   0 r10:   0 r11:   0 r12:   0 r13:   0 r14:   0 r15:   0 
-r16: 157 r17:   6 r18:   9 r19:   3 r20:   4 r21:  12 r22:   9 r23:   0 
+r16: 222 r17:  10 r18:   9 r19:   3 r20:   4 r21:  12 r22:   9 r23:   0 
 r24:   6 r25:   0 r26:   0 r27:   0 r28:   3 r29:   3 r30:   2 r31:   2 
 x  :   0 y  :   1 z  :   2 
 Registers used: 15 out of 35 (42.9%)
@@ -1372,18 +1489,18 @@ Registers used: 15 out of 35 (42.9%)
 "ATmega16" instruction use summary:
 .lds  :   0 .sts  :   0 adc   :   0 add   :   1 adiw  :   0 and   :   0 
 andi  :   1 asr   :   0 bclr  :   0 bld   :   0 brbc  :   0 brbs  :   0 
-brcc  :   1 brcs  :   0 break :   0 breq  :  29 brge  :   0 brhc  :   0 
+brcc  :   1 brcs  :   0 break :   0 breq  :  30 brge  :   0 brhc  :   0 
 brhs  :   0 brid  :   0 brie  :   0 brlo  :   0 brlt  :   0 brmi  :   0 
 brne  :   8 brpl  :   0 brsh  :   0 brtc  :   0 brts  :   0 brvc  :   0 
-brvs  :   0 bset  :   0 bst   :   0 call  :   7 cbi   :   0 cbr   :   0 
+brvs  :   0 bset  :   0 bst   :   0 call  :   8 cbi   :   0 cbr   :   0 
 clc   :   0 clh   :   0 cli   :   1 cln   :   0 clr   :   0 cls   :   0 
 clt   :   0 clv   :   0 clz   :   0 com   :   0 cp    :   2 cpc   :   0 
-cpi   :  35 cpse  :   0 dec   :   5 eor   :   0 fmul  :   0 fmuls :   0 
-fmulsu:   0 icall :   0 ijmp  :   0 in    :   6 inc   :   5 jmp   :   3 
-ld    :   1 ldd   :   0 ldi   :  82 lds   :   0 lpm   :   0 lsl   :   0 
-lsr   :   0 mov   :  22 movw  :   0 mul   :   0 muls  :   0 mulsu :   0 
-neg   :   0 nop   :   4 or    :   0 ori   :   4 out   :  47 pop   :   0 
-push  :   0 rcall :   0 ret   :  31 reti  :   0 rjmp  :   1 rol   :   0 
+cpi   :  36 cpse  :   0 dec   :   5 eor   :   0 fmul  :   0 fmuls :   0 
+fmulsu:   0 icall :   0 ijmp  :   0 in    :   9 inc   :   5 jmp   :   3 
+ld    :   1 ldd   :   0 ldi   : 110 lds   :   0 lpm   :   0 lsl   :   0 
+lsr   :   0 mov   :  26 movw  :   0 mul   :   0 muls  :   0 mulsu :   0 
+neg   :   0 nop   :   8 or    :   0 ori   :   5 out   :  75 pop   :   0 
+push  :   0 rcall :   0 ret   :  32 reti  :   0 rjmp  :   1 rol   :   0 
 ror   :   2 sbc   :   0 sbci  :   0 sbi   :   0 sbic  :   0 sbis  :   1 
 sbiw  :   0 sbr   :   0 sbrc  :   0 sbrs  :   0 sec   :   1 seh   :   0 
 sei   :   1 sen   :   0 ser   :   0 ses   :   0 set   :   0 sev   :   0 
@@ -1394,7 +1511,7 @@ Instructions used: 27 out of 113 (23.9%)
 "ATmega16" memory use summary [bytes]:
 Segment   Begin    End      Code   Data   Used    Size   Use%
 ---------------------------------------------------------------
-[.cseg] 0x000000 0x00027e    638      0    638   16384   3.9%
+[.cseg] 0x000000 0x000310    784      0    784   16384   4.8%
 [.dseg] 0x000060 0x000260      0    512    512    1024  50.0%
 [.eseg] 0x000000 0x000000      0      0      0     512   0.0%
 

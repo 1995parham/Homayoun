@@ -72,6 +72,7 @@ reset_isr:
 	ldi r16, $0F
 	out DDRC, r16
 	
+	call lcd_function_set
 	call lcd_init
 	sei
 	jmp start
@@ -345,6 +346,92 @@ usart_send_try:
 	ldi YH, HIGH(buffer)
 	ret
 
+; Function set of led
+lcd_function_set:
+	; E = PD6 = 1
+	ldi r16, (1 << PD6)
+	out PORTD, r16
+	; PB0 - PB7 --> Output
+	ldi r16, $FF
+	out DDRB, r16
+	; Out HIGH($20)
+	ldi r16, $20
+	out PORTB, r16
+	; RS = PC3 = 0
+	; RW = PD7 = 0
+	; E = PD6 = 0
+	ldi r16, (0 << PC3)
+	out PORTC, r16
+	ldi r16, (0 << PD7) | (0 << PD6)
+	out PORTD, r16
+lcd_function_set_busy:
+	; E = PD6 = 1
+	ldi r16, (1 << PD6)
+	out PORTD, r16
+	nop
+	; RS = PC3 = 0
+	; RW = PD7 = 1
+	; E = PD6 = 0
+	ldi r16, (0 << PC3)
+	out PORTC, r16
+	ldi r16, (1 << PD7) | (0 << PD6)
+	out PORTD, r16
+	; Get busy flag
+	in r16, PINB
+	mov r17, r16
+	; E = PD6 = 1
+	ldi r16, (1 << PD6)
+	out PORTD, r16
+	nop
+	; RS = PC3 = 0
+	; RW = PD7 = 1
+	; E = PD6 = 0
+	ldi r16, (0 << PC3)
+	out PORTC, r16
+	ldi r16, (1 << PD7) | (0 << PD6)
+	out PORTD, r16
+	; destroy chert flag :D
+	in r16, PINB
+	; Restore busy flag
+	mov r16, r17
+	ori r16, $7F
+	cpi r16, $FF
+	breq lcd_init_busy
+	; E = PD6 = 1
+	ldi r16, (1 << PD6)
+	out PORTD, r16
+	; Out HIGH($20)
+	ldi r16, $20
+	out PORTB, r16
+	; RS = PC3 = 0
+	; RW = PD7 = 0
+	; E = PD6 = 0
+	ldi r16, (0 << PC3)
+	out PORTC, r16
+	ldi r16, (0 << PD7) | (0 << PD6)
+	out PORTD, r16
+	; E = PD6 = 1
+	ldi r16, (1 << PD6)
+	out PORTD, r16
+	; Out LOW($20)
+	ldi r16, $00
+	out PORTB, r16
+	; RS = PC3 = 0
+	; RW = PD7 = 0
+	; E = PD6 = 0
+	ldi r16, (0 << PC3)
+	out PORTC, r16
+	ldi r16, (0 << PD7) | (0 << PD6)
+	out PORTD, r16
+	; E = PD6 = 1
+	ldi r16, (1 << PD6)
+	out PORTD, r16
+	; PB0 - PB6 --> output
+	; PB7 --> Input
+	ldi r16, $7F
+	out DDRB, r16
+	ret
+	
 ; Set dispaly, cursor on .. let's rock :)
 lcd_init:
 lcd_init_busy:
@@ -359,8 +446,24 @@ lcd_init_busy:
 	out PORTC, r16
 	ldi r16, (1 << PD7) | (0 << PD6)
 	out PORTD, r16
-	; Check busy flag
+	; Get busy flag
 	in r16, PINB
+	mov r17, r16
+	; E = PD6 = 1
+	ldi r16, (1 << PD6)
+	out PORTD, r16
+	nop
+	; RS = PC3 = 0
+	; RW = PD7 = 1
+	; E = PD6 = 0
+	ldi r16, (0 << PC3)
+	out PORTC, r16
+	ldi r16, (1 << PD7) | (0 << PD6)
+	out PORTD, r16
+	; destroy chert flag :D
+	in r16, PINB
+	; Restore busy flag
+	mov r16, r17
 	ori r16, $7F
 	cpi r16, $FF
 	breq lcd_init_busy
@@ -370,8 +473,22 @@ lcd_init_busy:
 	; PB0 - PB7 --> Output
 	ldi r16, $FF
 	out DDRB, r16
-	; Out 0x0F
-	ldi r16, $0F
+	; Out HIGH(0x0F)
+	ldi r16, $00
+	out PORTB, r16
+	; RS = PC3 = 0
+	; RW = PD7 = 0
+	; E = PD6 = 0
+	ldi r16, (0 << PC3)
+	out PORTC, r16
+	ldi r16, (0 << PD7) | (0 << PD6)
+	out PORTD, r16
+	; E = PD6 = 1
+	ldi r16, (1 << PD6)
+	out PORTD, r16
+	nop
+	; Out LOW(0x0F)
+	ldi r16, $F0
 	out PORTB, r16
 	; RS = PC3 = 0
 	; RW = PD7 = 0
